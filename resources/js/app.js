@@ -9,7 +9,7 @@ import Api from './api.js';
 import VModal from 'vue-js-modal';
 
 Vue.use(VueRouter);
-Vue.use(VModal);
+Vue.use(VModal, { dialog: true });
 const router = new VueRouter(routes);
 
 router.beforeEach((to, from, next) => {

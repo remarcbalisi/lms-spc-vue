@@ -1958,6 +1958,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1967,7 +1973,7 @@ __webpack_require__.r(__webpack_exports__);
       show_loading: true,
       roles: [],
       edit_role: {},
-      creating: false
+      updating: false
     };
   },
   mounted: function mounted() {
@@ -1996,6 +2002,64 @@ __webpack_require__.r(__webpack_exports__);
     editModal: function editModal(role) {
       this.edit_role = role;
       this.$modal.show('edit-modal');
+    },
+    update: function update(role_id) {
+      var _this3 = this;
+
+      this.updating = true;
+      api.call('post', "/api/admin/roles/update/".concat(role_id), {
+        name: this.edit_role.name
+      }).then(function (response) {
+        if (response.status === 200) {
+          _this3.updating = false;
+
+          _this3.$modal.hide('edit-modal');
+
+          _this3.getRoles();
+
+          alert(response.data.message);
+        }
+      });
+    },
+    deleteAlert: function deleteAlert($role) {
+      var _this4 = this;
+
+      this.$modal.show('dialog', {
+        title: 'Warning!',
+        text: "Are you sure you want to delete ".concat($role.name, "?"),
+        buttons: [{
+          title: 'Deal with it',
+          handler: function handler() {
+            _this4.destroy($role);
+          }
+        }, {
+          title: '',
+          // Button title
+          "default": true,
+          // Will be triggered by default if 'Enter' pressed.
+          handler: function handler() {
+            _this4.destroy($role);
+          } // Button click handler
+
+        }, {
+          title: 'Close'
+        }]
+      });
+    },
+    destroy: function destroy($role) {
+      var _this5 = this;
+
+      api.call('get', "/api/admin/roles/destroy/".concat($role.id)).then(function (response) {
+        if (response.status === 200) {
+          _this5.$modal.hide('edit-modal');
+
+          _this5.getRoles();
+
+          _this5.$modal.hide('dialog');
+
+          alert(response.data.message);
+        }
+      });
     }
   }
 });
@@ -37893,6 +37957,20 @@ var render = function() {
                                     }
                                   },
                                   [_vm._v("Edit")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass:
+                                      "bg-red rounded p-1 text-sm pl-2 pr-2",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.deleteAlert(role)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Delete")]
                                 )
                               ]
                             )
@@ -37958,13 +38036,18 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  !_vm.creating
+                  !_vm.updating
                     ? _c(
                         "button",
                         {
                           staticClass:
                             "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                          attrs: { type: "button" }
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.update(_vm.edit_role.id)
+                            }
+                          }
                         },
                         [
                           _vm._v(
@@ -37974,7 +38057,28 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.creating
+                  !_vm.updating
+                    ? _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.$modal.hide("edit-modal")
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Close\n                        "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.updating
                     ? _c("img", {
                         attrs: {
                           width: "30",
@@ -37986,6 +38090,8 @@ var render = function() {
                 ])
               ])
             ]),
+            _vm._v(" "),
+            _c("v-dialog"),
             _vm._v(" "),
             _vm.show_loading
               ? _c("div", { staticClass: "text-center" }, [
@@ -53724,7 +53830,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_js_modal__WEBPACK_IMPORTED_MODULE_8___default.a);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_js_modal__WEBPACK_IMPORTED_MODULE_8___default.a, {
+  dialog: true
+});
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"](_routes__WEBPACK_IMPORTED_MODULE_4__["default"]);
 router.beforeEach(function (to, from, next) {
   if (to.matched.some(function (record) {
