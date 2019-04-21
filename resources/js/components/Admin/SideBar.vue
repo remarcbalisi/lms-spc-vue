@@ -15,7 +15,7 @@
                 </li>
             </ul>
         </section>
-        <section>
+        <section class="mb-6">
             <h5 class="uppercase mb-2">Role</h5>
             <ul class="list-reset text-sm">
                 <li class="pb-4">
@@ -30,7 +30,7 @@
                 </li>
             </ul>
         </section>
-        <section>
+        <section class="mb-6">
             <h5 class="uppercase mb-2">College</h5>
             <ul class="list-reset text-sm">
                 <li class="pb-4">

@@ -39,5 +39,8 @@ Route::middleware('auth:api', 'role:admin')->group(function () {
 
         //College
         Route::post('/colleges/store', 'API\Admin\CollegeController@store');
+        Route::post('/colleges/update/{college_id}', 'API\Admin\CollegeController@update');
+        Route::get('/colleges/destroy/{college_id}', 'API\Admin\CollegeController@destroy');
+        Route::get('/colleges', 'API\Admin\CollegeController@getAllColleges');
     });
 });
