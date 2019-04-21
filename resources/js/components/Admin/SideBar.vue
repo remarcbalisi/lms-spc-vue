@@ -30,6 +30,21 @@
                 </li>
             </ul>
         </section>
+        <section>
+            <h5 class="uppercase mb-2">College</h5>
+            <ul class="list-reset text-sm">
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/college/create">
+                        Create
+                    </router-link>
+                </li>
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/college/list">
+                        List
+                    </router-link>
+                </li>
+            </ul>
+        </section>
     </aside>
 </template>
 

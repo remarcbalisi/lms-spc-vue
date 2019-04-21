@@ -4,6 +4,7 @@ import AdminHome from "./components/Admin/Home";
 import AdminUserCreate from "./components/Admin/User/Create";
 import AdminRoleCreate from "./components/Admin/Role/Create";
 import AdminRoleList from "./components/Admin/Role/List";
+import AdminCollegeCreate from "./components/Admin/College/Create";
 
 export default {
     mode: 'history',
@@ -40,6 +41,12 @@ export default {
             path: '/admin/role/list',
             name: 'admin_role_list',
             component: AdminRoleList,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/college/create',
+            name: 'admin_college_create',
+            component: AdminCollegeCreate,
             meta: { middlewareAuth: true }
         }
     ]
