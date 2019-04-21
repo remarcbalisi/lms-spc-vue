@@ -45,6 +45,21 @@
                 </li>
             </ul>
         </section>
+        <section class="mb-6">
+            <h5 class="uppercase mb-2">Course</h5>
+            <ul class="list-reset text-sm">
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/course/create">
+                        Create
+                    </router-link>
+                </li>
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/course/list">
+                        List
+                    </router-link>
+                </li>
+            </ul>
+        </section>
     </aside>
 </template>
 
