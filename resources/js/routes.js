@@ -7,6 +7,7 @@ import AdminRoleList from "./components/Admin/Role/List";
 import AdminCollegeCreate from "./components/Admin/College/Create";
 import AdminCollegeList from "./components/Admin/College/List";
 import AdminCourseCreate from "./components/Admin/Course/Create";
+import AdminCourseList from "./components/Admin/Course/List";
 
 export default {
     mode: 'history',
@@ -61,6 +62,12 @@ export default {
             path: '/admin/course/create',
             name: 'admin_course_create',
             component: AdminCourseCreate,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/course/list',
+            name: 'admin_course_list',
+            component: AdminCourseList,
             meta: { middlewareAuth: true }
         },
     ]
