@@ -48,5 +48,11 @@ Route::middleware('auth:api', 'role:admin')->group(function () {
         Route::post('/courses/update/{college_id}', 'API\Admin\CourseController@update');
         Route::get('/courses/destroy/{college_id}', 'API\Admin\CourseController@destroy');
         Route::get('/courses', 'API\Admin\CourseController@getAllCourses');
+
+        //Academic Year
+        Route::post('/academic-years/store', 'API\Admin\AcademicYearController@store');
+        Route::get('/academic-years', 'API\Admin\AcademicYearController@get');
+        Route::post('/academic-years/update/{ay_id}', 'API\Admin\AcademicYearController@update');
+        Route::get('/academic-years/destroy/{ay_id}', 'API\Admin\AcademicYearController@destroy');
     });
 });

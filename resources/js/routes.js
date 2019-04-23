@@ -8,6 +8,7 @@ import AdminCollegeCreate from "./components/Admin/College/Create";
 import AdminCollegeList from "./components/Admin/College/List";
 import AdminCourseCreate from "./components/Admin/Course/Create";
 import AdminCourseList from "./components/Admin/Course/List";
+import AdminAySemesterView from "./components/Admin/AyAndSemester/View";
 
 export default {
     mode: 'history',
@@ -68,6 +69,12 @@ export default {
             path: '/admin/course/list',
             name: 'admin_course_list',
             component: AdminCourseList,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/ay-semester/view',
+            name: 'admin_ay_semester_view',
+            component: AdminAySemesterView,
             meta: { middlewareAuth: true }
         },
     ]

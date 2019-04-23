@@ -1754,6 +1754,235 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      authenticated: auth.check(),
+      user: auth.user,
+      creating: false,
+      from_date: null,
+      to_date: null,
+      errors: [],
+      academic_years: [],
+      show_loading: true,
+      edit_ay: {
+        from_date: null,
+        to_date: null
+      },
+      updating_ay: false
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    Event.$on('userLoggedIn', function () {
+      _this.authenticated = true;
+      _this.user = auth.user;
+    });
+    this.getAcademicYears();
+  },
+  methods: {
+    getAcademicYears: function getAcademicYears() {
+      var _this2 = this;
+
+      api.call('get', "/api/admin/academic-years").then(function (response) {
+        _this2.academic_years = response.data.data;
+        _this2.show_loading = false;
+      });
+    },
+    create: function create() {
+      var _this3 = this;
+
+      this.creating = true;
+      var data = {
+        from_date: this.from_date,
+        to_date: this.to_date
+      };
+      api.call('post', '/api/admin/academic-years/store', data).then(function (response) {
+        _this3.creating = false;
+
+        if (response.data.status == 200) {
+          _this3.errors = [];
+
+          _this3.getAcademicYears();
+
+          alert(response.data.message);
+        } else {
+          _this3.errors.push(response.data.message);
+        }
+      });
+    },
+    editAcademicYearModal: function editAcademicYearModal(academic_year) {
+      this.edit_ay = academic_year;
+      this.$modal.show('edit-ay-modal');
+    },
+    updateAy: function updateAy() {
+      var _this4 = this;
+
+      this.updating_ay = true;
+      api.call('post', "/api/admin/academic-years/update/".concat(this.edit_ay.id), this.edit_ay).then(function (response) {
+        _this4.updating_ay = false;
+
+        if (response.data.status == 200) {
+          _this4.errors = [];
+          alert(response.data.message);
+        } else {
+          _this4.errors.push(response.data.message);
+        }
+      });
+    },
+    deleteAlert: function deleteAlert(academic_year) {
+      var _this5 = this;
+
+      this.$modal.show('dialog', {
+        title: 'Warning!',
+        text: "Are you sure you want to delete AY ".concat(academic_year.from_date, " - ").concat(academic_year.to_date, "?"),
+        buttons: [{
+          title: 'Deal with it',
+          handler: function handler() {
+            _this5.destroy(academic_year);
+          }
+        }, {
+          title: '',
+          // Button title
+          "default": true,
+          // Will be triggered by default if 'Enter' pressed.
+          handler: function handler() {
+            _this5.destroy(academic_year);
+          } // Button click handler
+
+        }, {
+          title: 'Close'
+        }]
+      });
+    },
+    destroy: function destroy(academic_year) {
+      var _this6 = this;
+
+      api.call('get', "/api/admin/academic-years/destroy/".concat(academic_year.id)).then(function (response) {
+        if (response.status === 200) {
+          _this6.getAcademicYears();
+
+          _this6.$modal.hide('dialog');
+
+          alert(response.data.message);
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Admin/College/Create.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Admin/College/Create.vue?vue&type=script&lang=js& ***!
@@ -2652,6 +2881,16 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -38369,6 +38608,474 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=template&id=23876e70&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=template&id=23876e70& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c(
+      "main",
+      { staticClass: "flex" },
+      [
+        _c("admin-side-bar"),
+        _vm._v(" "),
+        _c("div", { staticClass: "primary flex" }, [
+          _c("div", { staticClass: "w-full" }, [
+            _vm.errors
+              ? _c(
+                  "div",
+                  { staticClass: "pb-4" },
+                  _vm._l(_vm.errors, function(error) {
+                    return _c("p", { staticClass: "text-red" }, [
+                      _vm._v(_vm._s(error))
+                    ])
+                  }),
+                  0
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("h2", [_vm._v("Academic Year")]),
+            _vm._v(" "),
+            _c("form", { staticClass: "w-full max-w-md" }, [
+              _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass:
+                        "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                      attrs: { for: "from-date" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                From\n                            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.from_date,
+                        expression: "from_date"
+                      }
+                    ],
+                    staticClass:
+                      "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                    attrs: {
+                      name: "from_date",
+                      id: "from-date",
+                      type: "number",
+                      placeholder: "From"
+                    },
+                    domProps: { value: _vm.from_date },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.from_date = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass:
+                        "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                      attrs: { for: "to-date" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                To\n                            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.to_date,
+                        expression: "to_date"
+                      }
+                    ],
+                    staticClass:
+                      "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                    attrs: {
+                      name: "to_date",
+                      id: "to-date",
+                      type: "number",
+                      placeholder: "To"
+                    },
+                    domProps: { value: _vm.to_date },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.to_date = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              !_vm.creating
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                      attrs: { type: "button" },
+                      on: { click: _vm.create }
+                    },
+                    [
+                      _vm._v(
+                        "\n                        Create\n                    "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.creating
+                ? _c("img", {
+                    attrs: {
+                      width: "30",
+                      height: "30",
+                      src: "/img/loading.gif"
+                    }
+                  })
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "w-full" },
+            [
+              _vm.academic_years && !_vm.show_loading
+                ? _c(
+                    "table",
+                    {
+                      staticClass: "text-left m-4 w-full",
+                      staticStyle: { "border-collapse": "collapse" }
+                    },
+                    [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.academic_years, function(academic_year) {
+                          return _c(
+                            "tr",
+                            { staticClass: "hover:bg-blue-lightest" },
+                            [
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "py-4 px-6 border-b border-grey-light"
+                                },
+                                [_vm._v(_vm._s(academic_year.from_date))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "py-4 px-6 border-b border-grey-light"
+                                },
+                                [_vm._v(_vm._s(academic_year.to_date))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "py-4 px-6 border-b border-grey-light"
+                                },
+                                [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "bg-orange rounded p-1 text-sm pl-2 pr-2",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.editAcademicYearModal(
+                                            academic_year
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Edit")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "bg-red rounded p-1 text-sm pl-2 pr-2",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.deleteAlert(academic_year)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Delete")]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("modal", { attrs: { name: "edit-ay-modal" } }, [
+                _c("div", { staticClass: "m-4" }, [
+                  _c("h2", { staticClass: "mb-2" }, [
+                    _vm._v(
+                      "Edit AY " +
+                        _vm._s(
+                          _vm.edit_ay.from_date + " - " + _vm.edit_ay.to_date
+                        )
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("form", { staticClass: "w-full max-w-md" }, [
+                    _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                      _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                            attrs: { for: "from-date" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                        From\n                                    "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.edit_ay.from_date,
+                              expression: "edit_ay.from_date"
+                            }
+                          ],
+                          staticClass:
+                            "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                          attrs: {
+                            name: "from_date",
+                            id: "from-date",
+                            type: "number",
+                            placeholder: "From"
+                          },
+                          domProps: { value: _vm.edit_ay.from_date },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.edit_ay,
+                                "from_date",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                      _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                            attrs: { for: "to-date" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                        To\n                                    "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.edit_ay.to_date,
+                              expression: "edit_ay.to_date"
+                            }
+                          ],
+                          staticClass:
+                            "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                          attrs: {
+                            name: "to_date",
+                            id: "to-date",
+                            type: "number",
+                            placeholder: "To"
+                          },
+                          domProps: { value: _vm.edit_ay.to_date },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.edit_ay,
+                                "to_date",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    !_vm.updating_ay
+                      ? _c(
+                          "button",
+                          {
+                            staticClass:
+                              "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                            attrs: { type: "button" },
+                            on: { click: _vm.updateAy }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Update\n                            "
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.updating_ay
+                      ? _c("img", {
+                          attrs: {
+                            width: "30",
+                            height: "30",
+                            src: "/img/loading.gif"
+                          }
+                        })
+                      : _vm._e()
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _vm.show_loading
+                ? _c("div", { staticClass: "text-center" }, [
+                    _c("img", {
+                      attrs: {
+                        width: "40",
+                        height: "40",
+                        src: "/img/loading.gif"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("Getting Information .. ")])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c("v-dialog")
+            ],
+            1
+          )
+        ])
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("header", { staticClass: "py-6" }, [
+      _c("img", {
+        attrs: { width: "50", height: "50", src: "/img/spc_logo.png" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c(
+          "th",
+          {
+            staticClass:
+              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
+          },
+          [_vm._v("From")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
+          },
+          [_vm._v("To")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
+          },
+          [_vm._v("Action")]
+        )
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Admin/College/Create.vue?vue&type=template&id=64ca5e5f&":
 /*!***********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Admin/College/Create.vue?vue&type=template&id=64ca5e5f& ***!
@@ -40056,6 +40763,30 @@ var render = function() {
                 attrs: { to: "/admin/course/list" }
               },
               [_vm._v("\n                    List\n                ")]
+            )
+          ],
+          1
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("section", { staticClass: "mb-6" }, [
+      _c("h5", { staticClass: "uppercase mb-2" }, [
+        _vm._v("Academic Year And Semester")
+      ]),
+      _vm._v(" "),
+      _c("ul", { staticClass: "list-reset text-sm" }, [
+        _c(
+          "li",
+          { staticClass: "pb-4" },
+          [
+            _c(
+              "router-link",
+              {
+                staticClass: "text-black no-underline",
+                attrs: { to: "/admin/ay-semester/view" }
+              },
+              [_vm._v("\n                    View\n                ")]
             )
           ],
           1
@@ -56026,6 +56757,75 @@ if (token) {
 
 /***/ }),
 
+/***/ "./resources/js/components/Admin/AyAndSemester/View.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/Admin/AyAndSemester/View.vue ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _View_vue_vue_type_template_id_23876e70___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./View.vue?vue&type=template&id=23876e70& */ "./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=template&id=23876e70&");
+/* harmony import */ var _View_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./View.vue?vue&type=script&lang=js& */ "./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _View_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _View_vue_vue_type_template_id_23876e70___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _View_vue_vue_type_template_id_23876e70___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Admin/AyAndSemester/View.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./View.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=template&id=23876e70&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=template&id=23876e70& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_template_id_23876e70___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./View.vue?vue&type=template&id=23876e70& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Admin/AyAndSemester/View.vue?vue&type=template&id=23876e70&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_template_id_23876e70___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_template_id_23876e70___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/Admin/College/Create.vue":
 /*!**********************************************************!*\
   !*** ./resources/js/components/Admin/College/Create.vue ***!
@@ -56873,6 +57673,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Admin_College_List__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Admin/College/List */ "./resources/js/components/Admin/College/List.vue");
 /* harmony import */ var _components_Admin_Course_Create__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/Admin/Course/Create */ "./resources/js/components/Admin/Course/Create.vue");
 /* harmony import */ var _components_Admin_Course_List__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/Admin/Course/List */ "./resources/js/components/Admin/Course/List.vue");
+/* harmony import */ var _components_Admin_AyAndSemester_View__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/Admin/AyAndSemester/View */ "./resources/js/components/Admin/AyAndSemester/View.vue");
+
 
 
 
@@ -56946,6 +57748,13 @@ __webpack_require__.r(__webpack_exports__);
     path: '/admin/course/list',
     name: 'admin_course_list',
     component: _components_Admin_Course_List__WEBPACK_IMPORTED_MODULE_9__["default"],
+    meta: {
+      middlewareAuth: true
+    }
+  }, {
+    path: '/admin/ay-semester/view',
+    name: 'admin_ay_semester_view',
+    component: _components_Admin_AyAndSemester_View__WEBPACK_IMPORTED_MODULE_10__["default"],
     meta: {
       middlewareAuth: true
     }

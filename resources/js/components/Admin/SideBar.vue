@@ -60,6 +60,16 @@
                 </li>
             </ul>
         </section>
+        <section class="mb-6">
+            <h5 class="uppercase mb-2">Academic Year And Semester</h5>
+            <ul class="list-reset text-sm">
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/ay-semester/view">
+                        View
+                    </router-link>
+                </li>
+            </ul>
+        </section>
     </aside>
 </template>
 
