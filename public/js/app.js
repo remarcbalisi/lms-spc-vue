@@ -2786,16 +2786,15 @@ __webpack_require__.r(__webpack_exports__);
       _this.authenticated = true;
       _this.user = auth.user;
     });
+    Event.$on('userLoggedOut', function () {
+      _this.authenticated = false;
+
+      _this.$router.push('/login');
+    });
   },
   methods: {
     logout: function logout() {
-      var _this2 = this;
-
-      auth.logout().then(function (_ref) {
-        var data = _ref.data;
-
-        _this2.$router.push('/login');
-      });
+      auth.logout();
     }
   }
 });
@@ -3145,15 +3144,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      user: {
+        first_name: '',
+        last_name: ''
+      }
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    auth.getUser().then(function (response) {
+      _this.user = response.data;
+    });
+  },
   methods: {
     logout: function logout() {
-      var _this = this;
+      var _this2 = this;
 
       auth.logout().then(function (_ref) {
         var data = _ref.data;
 
-        _this.$router.push('/login');
+        _this2.$router.push('/login');
       });
     }
   }
@@ -40679,7 +40704,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "primary flex-1" }, [
-      _c("h1", [_vm._v("Test")])
+      _c("h1", [_vm._v("Welcome")])
     ])
   }
 ]
@@ -41127,6 +41152,26 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("aside", { staticClass: "w-1/5" }, [
+    _c("section", { staticClass: "mb-6" }, [
+      _c("h5", { staticClass: "uppercase mb-2" }, [
+        _vm._v(_vm._s(_vm.user.first_name))
+      ]),
+      _vm._v(" "),
+      _c("ul", { staticClass: "list-reset text-sm" }, [
+        _c("li", { staticClass: "pb-4" }, [
+          _c(
+            "a",
+            {
+              staticClass: "text-black no-underline",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.logout }
+            },
+            [_vm._v("\n                    Logout\n                ")]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
     _c("section", { staticClass: "mb-6" }, [
       _c("h5", { staticClass: "uppercase mb-2" }, [_vm._v("User")]),
       _vm._v(" "),
@@ -57189,12 +57234,7 @@ function () {
   }, {
     key: "getUser",
     value: function getUser() {
-      var _this = this;
-
-      api.call('get', '/api/get-user').then(function (_ref) {
-        var data = _ref.data;
-        _this.user = data;
-      });
+      return api.call('get', '/api/get-user');
     }
   }]);
 

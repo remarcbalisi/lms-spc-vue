@@ -40,10 +40,7 @@ class Auth {
     }
 
     getUser() {
-        api.call('get', '/api/get-user')
-            .then(({data}) => {
-                this.user = data;
-            });
+        return api.call('get', '/api/get-user');
     }
 }
 

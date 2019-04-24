@@ -6,7 +6,7 @@
         <main class="flex">
             <admin-side-bar></admin-side-bar>
             <div class="primary flex-1">
-                <h1>Test</h1>
+                <h1>Welcome</h1>
             </div>
         </main>
     </div>
@@ -25,13 +25,14 @@
                 this.authenticated = true;
                 this.user = auth.user;
             });
+            Event.$on('userLoggedOut', () => {
+                this.authenticated = false;
+                this.$router.push('/login');
+            });
         },
         methods: {
             logout() {
-                auth.logout().then(({data})=>{
-                    this.$router.push('/login');
-                });
-
+                auth.logout();
             }
         }
     }
