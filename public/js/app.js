@@ -1863,6 +1863,88 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1878,7 +1960,20 @@ __webpack_require__.r(__webpack_exports__);
         from_date: null,
         to_date: null
       },
-      updating_ay: false
+      updating_ay: false,
+      semester: {
+        name: '',
+        slug: '',
+        creating: false,
+        show_loading: true
+      },
+      edit_semester: {
+        name: '',
+        slug: '',
+        creating: false,
+        show_loading: true
+      },
+      semesters: []
     };
   },
   mounted: function mounted() {
@@ -1889,6 +1984,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.user = auth.user;
     });
     this.getAcademicYears();
+    this.getSemesters();
   },
   methods: {
     getAcademicYears: function getAcademicYears() {
@@ -1899,8 +1995,16 @@ __webpack_require__.r(__webpack_exports__);
         _this2.show_loading = false;
       });
     },
-    create: function create() {
+    getSemesters: function getSemesters() {
       var _this3 = this;
+
+      api.call('get', "/api/admin/semesters").then(function (response) {
+        _this3.semesters = response.data.data;
+        _this3.semester.show_loading = false;
+      });
+    },
+    create: function create() {
+      var _this4 = this;
 
       this.creating = true;
       var data = {
@@ -1908,16 +2012,35 @@ __webpack_require__.r(__webpack_exports__);
         to_date: this.to_date
       };
       api.call('post', '/api/admin/academic-years/store', data).then(function (response) {
-        _this3.creating = false;
+        _this4.creating = false;
 
         if (response.data.status == 200) {
-          _this3.errors = [];
+          _this4.errors = [];
 
-          _this3.getAcademicYears();
+          _this4.getAcademicYears();
 
           alert(response.data.message);
         } else {
-          _this3.errors.push(response.data.message);
+          _this4.errors.push(response.data.message);
+        }
+      });
+    },
+    createSemester: function createSemester() {
+      var _this5 = this;
+
+      this.semester.creating = true;
+      api.call('post', '/api/admin/semesters/store', this.semester).then(function (response) {
+        _this5.semester.creating = false;
+
+        if (response.data.status == 200) {
+          _this5.errors = [];
+
+          _this5.getSemesters();
+
+          _this5.semester.name = '';
+          alert(response.data.message);
+        } else {
+          _this5.errors.push(response.data.message);
         }
       });
     },
@@ -1925,23 +2048,51 @@ __webpack_require__.r(__webpack_exports__);
       this.edit_ay = academic_year;
       this.$modal.show('edit-ay-modal');
     },
+    editSemesterModal: function editSemesterModal(semester) {
+      this.edit_semester = semester;
+      this.$modal.show('edit-semester-modal');
+    },
     updateAy: function updateAy() {
-      var _this4 = this;
+      var _this6 = this;
 
       this.updating_ay = true;
       api.call('post', "/api/admin/academic-years/update/".concat(this.edit_ay.id), this.edit_ay).then(function (response) {
-        _this4.updating_ay = false;
+        _this6.updating_ay = false;
 
         if (response.data.status == 200) {
-          _this4.errors = [];
+          _this6.errors = [];
           alert(response.data.message);
         } else {
-          _this4.errors.push(response.data.message);
+          _this6.errors.push(response.data.message);
+        }
+      });
+    },
+    updateSemester: function updateSemester() {
+      var _this7 = this;
+
+      this.edit_semester.show_loading = true;
+      api.call('post', "/api/admin/semesters/update/".concat(this.edit_semester.id), this.edit_semester).then(function (response) {
+        _this7.edit_semester.show_loading = false;
+
+        if (response.data.status == 200) {
+          _this7.errors = [];
+
+          _this7.$modal.hide('edit-semester-modal');
+
+          _this7.getSemesters();
+
+          alert(response.data.message);
+        } else {
+          _this7.errors.push(response.data.message);
+
+          _this7.getSemesters();
+
+          _this7.$modal.hide('edit-semester-modal');
         }
       });
     },
     deleteAlert: function deleteAlert(academic_year) {
-      var _this5 = this;
+      var _this8 = this;
 
       this.$modal.show('dialog', {
         title: 'Warning!',
@@ -1949,7 +2100,7 @@ __webpack_require__.r(__webpack_exports__);
         buttons: [{
           title: 'Deal with it',
           handler: function handler() {
-            _this5.destroy(academic_year);
+            _this8.destroy(academic_year);
           }
         }, {
           title: '',
@@ -1957,7 +2108,7 @@ __webpack_require__.r(__webpack_exports__);
           "default": true,
           // Will be triggered by default if 'Enter' pressed.
           handler: function handler() {
-            _this5.destroy(academic_year);
+            _this8.destroy(academic_year);
           } // Button click handler
 
         }, {
@@ -1966,13 +2117,51 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     destroy: function destroy(academic_year) {
-      var _this6 = this;
+      var _this9 = this;
 
       api.call('get', "/api/admin/academic-years/destroy/".concat(academic_year.id)).then(function (response) {
         if (response.status === 200) {
-          _this6.getAcademicYears();
+          _this9.getAcademicYears();
 
-          _this6.$modal.hide('dialog');
+          _this9.$modal.hide('dialog');
+
+          alert(response.data.message);
+        }
+      });
+    },
+    deleteSemesterAlert: function deleteSemesterAlert(semester) {
+      var _this10 = this;
+
+      this.$modal.show('dialog', {
+        title: 'Warning!',
+        text: "Are you sure you want to delete ".concat(semester.name, " Semester?"),
+        buttons: [{
+          title: 'Deal with it',
+          handler: function handler() {
+            _this10.destroySemester(semester);
+          }
+        }, {
+          title: '',
+          // Button title
+          "default": true,
+          // Will be triggered by default if 'Enter' pressed.
+          handler: function handler() {
+            _this10.destroySemester(semester);
+          } // Button click handler
+
+        }, {
+          title: 'Close'
+        }]
+      });
+    },
+    destroySemester: function destroySemester(semester) {
+      var _this11 = this;
+
+      api.call('get', "/api/admin/semesters/destroy/".concat(semester.id)).then(function (response) {
+        if (response.status === 200) {
+          _this11.getSemesters();
+
+          _this11.$modal.hide('dialog');
 
           alert(response.data.message);
         }
@@ -38632,7 +38821,7 @@ var render = function() {
       [
         _c("admin-side-bar"),
         _vm._v(" "),
-        _c("div", { staticClass: "primary flex" }, [
+        _c("div", { staticClass: "primary flex-1" }, [
           _c("div", { staticClass: "w-full" }, [
             _vm.errors
               ? _c(
@@ -39016,6 +39205,288 @@ var render = function() {
               _c("v-dialog")
             ],
             1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-full mb-5" }, [
+            _vm.errors
+              ? _c(
+                  "div",
+                  { staticClass: "pb-4" },
+                  _vm._l(_vm.errors, function(error) {
+                    return _c("p", { staticClass: "text-red" }, [
+                      _vm._v(_vm._s(error))
+                    ])
+                  }),
+                  0
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("h2", [_vm._v("Semester")]),
+            _vm._v(" "),
+            _c("form", { staticClass: "w-full max-w-md" }, [
+              _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass:
+                        "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                      attrs: { for: "semester-name" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                Name\n                            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.semester.name,
+                        expression: "semester.name"
+                      }
+                    ],
+                    staticClass:
+                      "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                    attrs: {
+                      name: "name",
+                      id: "semester-name",
+                      type: "text",
+                      placeholder: "Name"
+                    },
+                    domProps: { value: _vm.semester.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.semester, "name", $event.target.value)
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              !_vm.semester.creating
+                ? _c(
+                    "button",
+                    {
+                      staticClass:
+                        "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                      attrs: { type: "button" },
+                      on: { click: _vm.createSemester }
+                    },
+                    [
+                      _vm._v(
+                        "\n                        Create\n                    "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.semester.creating
+                ? _c("img", {
+                    attrs: {
+                      width: "30",
+                      height: "30",
+                      src: "/img/loading.gif"
+                    }
+                  })
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "w-full" },
+            [
+              _vm.semesters && !_vm.semester.show_loading
+                ? _c(
+                    "table",
+                    {
+                      staticClass: "text-left m-4 w-full",
+                      staticStyle: { "border-collapse": "collapse" }
+                    },
+                    [
+                      _vm._m(2),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.semesters, function(sem) {
+                          return _c(
+                            "tr",
+                            { staticClass: "hover:bg-blue-lightest" },
+                            [
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "py-4 px-6 border-b border-grey-light"
+                                },
+                                [_vm._v(_vm._s(sem.name))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "py-4 px-6 border-b border-grey-light"
+                                },
+                                [_vm._v(_vm._s(sem.slug))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "py-4 px-6 border-b border-grey-light"
+                                },
+                                [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "bg-orange rounded p-1 text-sm pl-2 pr-2",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.editSemesterModal(sem)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Edit")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "bg-red rounded p-1 text-sm pl-2 pr-2",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.deleteSemesterAlert(sem)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Delete")]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("modal", { attrs: { name: "edit-semester-modal" } }, [
+                _c("div", { staticClass: "m-4" }, [
+                  _c("h2", { staticClass: "mb-2" }, [
+                    _vm._v(
+                      "Edit " + _vm._s(_vm.edit_semester.name) + " Semester"
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("form", { staticClass: "w-full max-w-md" }, [
+                    _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                      _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                            attrs: { for: "edit-semester-name" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                        Name\n                                    "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.edit_semester.name,
+                              expression: "edit_semester.name"
+                            }
+                          ],
+                          staticClass:
+                            "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                          attrs: {
+                            name: "name",
+                            id: "edit-semester-name",
+                            type: "text",
+                            placeholder: "Name"
+                          },
+                          domProps: { value: _vm.edit_semester.name },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.edit_semester,
+                                "name",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    !_vm.edit_semester.creating
+                      ? _c(
+                          "button",
+                          {
+                            staticClass:
+                              "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                            attrs: { type: "button" },
+                            on: { click: _vm.updateSemester }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Update\n                            "
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.edit_semester.creating
+                      ? _c("img", {
+                          attrs: {
+                            width: "30",
+                            height: "30",
+                            src: "/img/loading.gif"
+                          }
+                        })
+                      : _vm._e()
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _vm.semester.show_loading
+                ? _c("div", { staticClass: "text-center" }, [
+                    _c("img", {
+                      attrs: {
+                        width: "40",
+                        height: "40",
+                        src: "/img/loading.gif"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("Getting Information .. ")])
+                  ])
+                : _vm._e()
+            ],
+            1
           )
         ])
       ],
@@ -39056,6 +39527,41 @@ var staticRenderFns = [
               "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
           },
           [_vm._v("To")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
+          },
+          [_vm._v("Action")]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c(
+          "th",
+          {
+            staticClass:
+              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
+          },
+          [_vm._v("Name")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
+          },
+          [_vm._v("Slug")]
         ),
         _vm._v(" "),
         _c(
