@@ -4,6 +4,11 @@ import AdminHome from "./components/Admin/Home";
 import AdminUserCreate from "./components/Admin/User/Create";
 import AdminRoleCreate from "./components/Admin/Role/Create";
 import AdminRoleList from "./components/Admin/Role/List";
+import AdminCollegeCreate from "./components/Admin/College/Create";
+import AdminCollegeList from "./components/Admin/College/List";
+import AdminCourseCreate from "./components/Admin/Course/Create";
+import AdminCourseList from "./components/Admin/Course/List";
+import AdminAySemesterView from "./components/Admin/AyAndSemester/View";
 
 export default {
     mode: 'history',
@@ -41,6 +46,36 @@ export default {
             name: 'admin_role_list',
             component: AdminRoleList,
             meta: { middlewareAuth: true }
-        }
+        },
+        {
+            path: '/admin/college/create',
+            name: 'admin_college_create',
+            component: AdminCollegeCreate,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/college/list',
+            name: 'admin_college_list',
+            component: AdminCollegeList,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/course/create',
+            name: 'admin_course_create',
+            component: AdminCourseCreate,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/course/list',
+            name: 'admin_course_list',
+            component: AdminCourseList,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/ay-semester/view',
+            name: 'admin_ay_semester_view',
+            component: AdminAySemesterView,
+            meta: { middlewareAuth: true }
+        },
     ]
 }

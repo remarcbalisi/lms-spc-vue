@@ -15,7 +15,7 @@
                 </li>
             </ul>
         </section>
-        <section>
+        <section class="mb-6">
             <h5 class="uppercase mb-2">Role</h5>
             <ul class="list-reset text-sm">
                 <li class="pb-4">
@@ -26,6 +26,46 @@
                 <li class="pb-4">
                     <router-link class="text-black no-underline" to="/admin/role/list">
                         List
+                    </router-link>
+                </li>
+            </ul>
+        </section>
+        <section class="mb-6">
+            <h5 class="uppercase mb-2">College</h5>
+            <ul class="list-reset text-sm">
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/college/create">
+                        Create
+                    </router-link>
+                </li>
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/college/list">
+                        List
+                    </router-link>
+                </li>
+            </ul>
+        </section>
+        <section class="mb-6">
+            <h5 class="uppercase mb-2">Course</h5>
+            <ul class="list-reset text-sm">
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/course/create">
+                        Create
+                    </router-link>
+                </li>
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/course/list">
+                        List
+                    </router-link>
+                </li>
+            </ul>
+        </section>
+        <section class="mb-6">
+            <h5 class="uppercase mb-2">Academic Year And Semester</h5>
+            <ul class="list-reset text-sm">
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/ay-semester/view">
+                        View
                     </router-link>
                 </li>
             </ul>

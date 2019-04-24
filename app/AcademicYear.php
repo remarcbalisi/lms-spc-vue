@@ -5,13 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Role extends Model
+class AcademicYear extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'roles';
-
+    protected $table = 'academic_years';
     protected $fillable = [
-        'name', 'slug',
+        'from_date', 'to_date'
     ];
 }
