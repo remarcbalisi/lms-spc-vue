@@ -1945,6 +1945,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1973,7 +1996,8 @@ __webpack_require__.r(__webpack_exports__);
         creating: false,
         show_loading: true
       },
-      semesters: []
+      semesters: [],
+      semester_arr: []
     };
   },
   mounted: function mounted() {
@@ -2051,6 +2075,19 @@ __webpack_require__.r(__webpack_exports__);
     editSemesterModal: function editSemesterModal(semester) {
       this.edit_semester = semester;
       this.$modal.show('edit-semester-modal');
+    },
+    addSemesterModal: function addSemesterModal(academic_year) {
+      this.edit_ay = academic_year;
+      this.$modal.show('add-semester-modal');
+    },
+    addSemesterToAy: function addSemesterToAy(edit_ay) {
+      api.call('post', "/api/admin/academic-year-semester/".concat(edit_ay.id, "/store"), {
+        semester_arr: this.semester_arr
+      }).then(function (response) {
+        if (response.data.status == 422) {
+          alert('Semester already exist in ' + edit_ay.from_date + ' - ' + edit_ay.to_date);
+        }
+      });
     },
     updateAy: function updateAy() {
       var _this6 = this;
@@ -38846,361 +38883,798 @@ var render = function() {
       [
         _c("admin-side-bar"),
         _vm._v(" "),
-        _c("div", { staticClass: "primary flex-1" }, [
-          _c("div", { staticClass: "w-full" }, [
-            _vm.errors
-              ? _c(
-                  "div",
-                  { staticClass: "pb-4" },
-                  _vm._l(_vm.errors, function(error) {
-                    return _c("p", { staticClass: "text-red" }, [
-                      _vm._v(_vm._s(error))
-                    ])
-                  }),
-                  0
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _c("h2", [_vm._v("Academic Year")]),
-            _vm._v(" "),
-            _c("form", { staticClass: "w-full max-w-md" }, [
-              _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
-                _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass:
-                        "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
-                      attrs: { for: "from-date" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                From\n                            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.from_date,
-                        expression: "from_date"
-                      }
-                    ],
-                    staticClass:
-                      "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
-                    attrs: {
-                      name: "from_date",
-                      id: "from-date",
-                      type: "number",
-                      placeholder: "From"
-                    },
-                    domProps: { value: _vm.from_date },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.from_date = $event.target.value
-                      }
-                    }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
-                _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass:
-                        "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
-                      attrs: { for: "to-date" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                To\n                            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.to_date,
-                        expression: "to_date"
-                      }
-                    ],
-                    staticClass:
-                      "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
-                    attrs: {
-                      name: "to_date",
-                      id: "to-date",
-                      type: "number",
-                      placeholder: "To"
-                    },
-                    domProps: { value: _vm.to_date },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.to_date = $event.target.value
-                      }
-                    }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              !_vm.creating
+        _c(
+          "div",
+          { staticClass: "primary flex-1" },
+          [
+            _c("div", { staticClass: "w-full" }, [
+              _vm.errors
                 ? _c(
-                    "button",
-                    {
-                      staticClass:
-                        "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                      attrs: { type: "button" },
-                      on: { click: _vm.create }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        Create\n                    "
-                      )
-                    ]
+                    "div",
+                    { staticClass: "pb-4" },
+                    _vm._l(_vm.errors, function(error) {
+                      return _c("p", { staticClass: "text-red" }, [
+                        _vm._v(_vm._s(error))
+                      ])
+                    }),
+                    0
                   )
                 : _vm._e(),
               _vm._v(" "),
-              _vm.creating
-                ? _c("img", {
-                    attrs: {
-                      width: "30",
-                      height: "30",
-                      src: "/img/loading.gif"
-                    }
-                  })
-                : _vm._e()
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "w-full" },
-            [
-              _vm.academic_years && !_vm.show_loading
-                ? _c(
-                    "table",
-                    {
-                      staticClass: "text-left m-4 w-full",
-                      staticStyle: { "border-collapse": "collapse" }
-                    },
-                    [
-                      _vm._m(1),
-                      _vm._v(" "),
-                      _c(
-                        "tbody",
-                        _vm._l(_vm.academic_years, function(academic_year) {
-                          return _c(
-                            "tr",
-                            { staticClass: "hover:bg-blue-lightest" },
+              _c("h2", [_vm._v("Academic Year")]),
+              _vm._v(" "),
+              _c("form", { staticClass: "w-full max-w-md" }, [
+                _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                  _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                        attrs: { for: "from-date" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                From\n                            "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.from_date,
+                          expression: "from_date"
+                        }
+                      ],
+                      staticClass:
+                        "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                      attrs: {
+                        name: "from_date",
+                        id: "from-date",
+                        type: "number",
+                        placeholder: "From"
+                      },
+                      domProps: { value: _vm.from_date },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.from_date = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                  _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                        attrs: { for: "to-date" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                To\n                            "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.to_date,
+                          expression: "to_date"
+                        }
+                      ],
+                      staticClass:
+                        "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                      attrs: {
+                        name: "to_date",
+                        id: "to-date",
+                        type: "number",
+                        placeholder: "To"
+                      },
+                      domProps: { value: _vm.to_date },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.to_date = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                !_vm.creating
+                  ? _c(
+                      "button",
+                      {
+                        staticClass:
+                          "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                        attrs: { type: "button" },
+                        on: { click: _vm.create }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Create\n                    "
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.creating
+                  ? _c("img", {
+                      attrs: {
+                        width: "30",
+                        height: "30",
+                        src: "/img/loading.gif"
+                      }
+                    })
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "w-full" },
+              [
+                _vm.academic_years && !_vm.show_loading
+                  ? _c(
+                      "table",
+                      {
+                        staticClass: "text-left m-4 w-full",
+                        staticStyle: { "border-collapse": "collapse" }
+                      },
+                      [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.academic_years, function(academic_year) {
+                            return _c(
+                              "tr",
+                              { staticClass: "hover:bg-blue-lightest" },
+                              [
+                                _c(
+                                  "td",
+                                  {
+                                    staticClass:
+                                      "py-4 px-6 border-b border-grey-light"
+                                  },
+                                  [_vm._v(_vm._s(academic_year.from_date))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    staticClass:
+                                      "py-4 px-6 border-b border-grey-light"
+                                  },
+                                  [_vm._v(_vm._s(academic_year.to_date))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    staticClass:
+                                      "py-4 px-6 border-b border-grey-light"
+                                  },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "bg-green rounded p-1 text-sm pl-2 pr-2",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.addSemesterModal(
+                                              academic_year
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Add Semester")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "bg-orange rounded p-1 text-sm pl-2 pr-2",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.editAcademicYearModal(
+                                              academic_year
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Edit")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "bg-red rounded p-1 text-sm pl-2 pr-2",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.deleteAlert(
+                                              academic_year
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Delete")]
+                                    )
+                                  ]
+                                )
+                              ]
+                            )
+                          }),
+                          0
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("modal", { attrs: { name: "edit-ay-modal" } }, [
+                  _c("div", { staticClass: "m-4" }, [
+                    _c("h2", { staticClass: "mb-2" }, [
+                      _vm._v(
+                        "Edit AY " +
+                          _vm._s(
+                            _vm.edit_ay.from_date + " - " + _vm.edit_ay.to_date
+                          )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("form", { staticClass: "w-full max-w-md" }, [
+                      _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                        _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                          _c(
+                            "label",
+                            {
+                              staticClass:
+                                "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                              attrs: { for: "from-date" }
+                            },
                             [
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "py-4 px-6 border-b border-grey-light"
-                                },
-                                [_vm._v(_vm._s(academic_year.from_date))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "py-4 px-6 border-b border-grey-light"
-                                },
-                                [_vm._v(_vm._s(academic_year.to_date))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "py-4 px-6 border-b border-grey-light"
-                                },
-                                [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "bg-orange rounded p-1 text-sm pl-2 pr-2",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.editAcademicYearModal(
-                                            academic_year
-                                          )
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Edit")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "bg-red rounded p-1 text-sm pl-2 pr-2",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.deleteAlert(academic_year)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Delete")]
-                                  )
-                                ]
+                              _vm._v(
+                                "\n                                        From\n                                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.edit_ay.from_date,
+                                expression: "edit_ay.from_date"
+                              }
+                            ],
+                            staticClass:
+                              "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                            attrs: {
+                              name: "from_date",
+                              id: "from-date",
+                              type: "number",
+                              placeholder: "From"
+                            },
+                            domProps: { value: _vm.edit_ay.from_date },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.edit_ay,
+                                  "from_date",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                        _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                          _c(
+                            "label",
+                            {
+                              staticClass:
+                                "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                              attrs: { for: "to-date" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                        To\n                                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.edit_ay.to_date,
+                                expression: "edit_ay.to_date"
+                              }
+                            ],
+                            staticClass:
+                              "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                            attrs: {
+                              name: "to_date",
+                              id: "to-date",
+                              type: "number",
+                              placeholder: "To"
+                            },
+                            domProps: { value: _vm.edit_ay.to_date },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.edit_ay,
+                                  "to_date",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      !_vm.updating_ay
+                        ? _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                              attrs: { type: "button" },
+                              on: { click: _vm.updateAy }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                Update\n                            "
                               )
                             ]
                           )
-                        }),
-                        0
-                      )
-                    ]
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.updating_ay
+                        ? _c("img", {
+                            attrs: {
+                              width: "30",
+                              height: "30",
+                              src: "/img/loading.gif"
+                            }
+                          })
+                        : _vm._e()
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm.show_loading
+                  ? _c("div", { staticClass: "text-center" }, [
+                      _c("img", {
+                        attrs: {
+                          width: "40",
+                          height: "40",
+                          src: "/img/loading.gif"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("p", [_vm._v("Getting Information .. ")])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("v-dialog")
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "w-full mb-5" }, [
+              _vm.errors
+                ? _c(
+                    "div",
+                    { staticClass: "pb-4" },
+                    _vm._l(_vm.errors, function(error) {
+                      return _c("p", { staticClass: "text-red" }, [
+                        _vm._v(_vm._s(error))
+                      ])
+                    }),
+                    0
                   )
                 : _vm._e(),
               _vm._v(" "),
-              _c("modal", { attrs: { name: "edit-ay-modal" } }, [
-                _c("div", { staticClass: "m-4" }, [
-                  _c("h2", { staticClass: "mb-2" }, [
-                    _vm._v(
-                      "Edit AY " +
-                        _vm._s(
-                          _vm.edit_ay.from_date + " - " + _vm.edit_ay.to_date
+              _c("h2", [_vm._v("Semester")]),
+              _vm._v(" "),
+              _c("form", { staticClass: "w-full max-w-md" }, [
+                _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                  _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                        attrs: { for: "semester-name" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                Name\n                            "
                         )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.semester.name,
+                          expression: "semester.name"
+                        }
+                      ],
+                      staticClass:
+                        "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                      attrs: {
+                        name: "name",
+                        id: "semester-name",
+                        type: "text",
+                        placeholder: "Name"
+                      },
+                      domProps: { value: _vm.semester.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.semester, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                !_vm.semester.creating
+                  ? _c(
+                      "button",
+                      {
+                        staticClass:
+                          "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                        attrs: { type: "button" },
+                        on: { click: _vm.createSemester }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Create\n                    "
+                        )
+                      ]
                     )
-                  ]),
-                  _vm._v(" "),
-                  _c("form", { staticClass: "w-full max-w-md" }, [
-                    _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
-                      _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
-                        _c(
-                          "label",
-                          {
-                            staticClass:
-                              "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
-                            attrs: { for: "from-date" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                        From\n                                    "
-                            )
-                          ]
-                        ),
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.semester.creating
+                  ? _c("img", {
+                      attrs: {
+                        width: "30",
+                        height: "30",
+                        src: "/img/loading.gif"
+                      }
+                    })
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "w-full" },
+              [
+                _vm.semesters && !_vm.semester.show_loading
+                  ? _c(
+                      "table",
+                      {
+                        staticClass: "text-left m-4 w-full",
+                        staticStyle: { "border-collapse": "collapse" }
+                      },
+                      [
+                        _vm._m(2),
                         _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.edit_ay.from_date,
-                              expression: "edit_ay.from_date"
-                            }
-                          ],
-                          staticClass:
-                            "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
-                          attrs: {
-                            name: "from_date",
-                            id: "from-date",
-                            type: "number",
-                            placeholder: "From"
-                          },
-                          domProps: { value: _vm.edit_ay.from_date },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.edit_ay,
-                                "from_date",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        })
-                      ])
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.semesters, function(sem) {
+                            return _c(
+                              "tr",
+                              { staticClass: "hover:bg-blue-lightest" },
+                              [
+                                _c(
+                                  "td",
+                                  {
+                                    staticClass:
+                                      "py-4 px-6 border-b border-grey-light"
+                                  },
+                                  [_vm._v(_vm._s(sem.name))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    staticClass:
+                                      "py-4 px-6 border-b border-grey-light"
+                                  },
+                                  [_vm._v(_vm._s(sem.slug))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    staticClass:
+                                      "py-4 px-6 border-b border-grey-light"
+                                  },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "bg-orange rounded p-1 text-sm pl-2 pr-2",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.editSemesterModal(sem)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Edit")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "bg-red rounded p-1 text-sm pl-2 pr-2",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.deleteSemesterAlert(sem)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Delete")]
+                                    )
+                                  ]
+                                )
+                              ]
+                            )
+                          }),
+                          0
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("modal", { attrs: { name: "edit-semester-modal" } }, [
+                  _c("div", { staticClass: "m-4" }, [
+                    _c("h2", { staticClass: "mb-2" }, [
+                      _vm._v(
+                        "Edit " + _vm._s(_vm.edit_semester.name) + " Semester"
+                      )
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
-                      _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
-                        _c(
-                          "label",
-                          {
-                            staticClass:
-                              "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
-                            attrs: { for: "to-date" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                        To\n                                    "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
+                    _c("form", { staticClass: "w-full max-w-md" }, [
+                      _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                        _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                          _c(
+                            "label",
                             {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.edit_ay.to_date,
-                              expression: "edit_ay.to_date"
-                            }
-                          ],
-                          staticClass:
-                            "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
-                          attrs: {
-                            name: "to_date",
-                            id: "to-date",
-                            type: "number",
-                            placeholder: "To"
-                          },
-                          domProps: { value: _vm.edit_ay.to_date },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.edit_ay,
-                                "to_date",
-                                $event.target.value
+                              staticClass:
+                                "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                              attrs: { for: "edit-semester-name" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                        Name\n                                    "
                               )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.edit_semester.name,
+                                expression: "edit_semester.name"
+                              }
+                            ],
+                            staticClass:
+                              "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                            attrs: {
+                              name: "name",
+                              id: "edit-semester-name",
+                              type: "text",
+                              placeholder: "Name"
+                            },
+                            domProps: { value: _vm.edit_semester.name },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.edit_semester,
+                                  "name",
+                                  $event.target.value
+                                )
+                              }
                             }
-                          }
-                        })
-                      ])
-                    ]),
+                          })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      !_vm.edit_semester.creating
+                        ? _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                              attrs: { type: "button" },
+                              on: { click: _vm.updateSemester }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                Update\n                            "
+                              )
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.edit_semester.creating
+                        ? _c("img", {
+                            attrs: {
+                              width: "30",
+                              height: "30",
+                              src: "/img/loading.gif"
+                            }
+                          })
+                        : _vm._e()
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm.semester.show_loading
+                  ? _c("div", { staticClass: "text-center" }, [
+                      _c("img", {
+                        attrs: {
+                          width: "40",
+                          height: "40",
+                          src: "/img/loading.gif"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("p", [_vm._v("Getting Information .. ")])
+                    ])
+                  : _vm._e()
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("modal", { attrs: { name: "add-semester-modal" } }, [
+              _c("div", { staticClass: "m-4" }, [
+                _c("h2", { staticClass: "mb-2" }, [
+                  _vm._v(
+                    "Add Semester in AY " +
+                      _vm._s(_vm.edit_ay.from_date) +
+                      " " +
+                      _vm._s(_vm.edit_ay.to_date)
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "form",
+                  { staticClass: "w-full max-w-md" },
+                  [
+                    _vm._l(_vm.semesters, function(sem) {
+                      return _c(
+                        "div",
+                        { staticClass: "flex flex-wrap -mx-3 mb-6" },
+                        [
+                          _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
+                            _c(
+                              "label",
+                              {
+                                staticClass:
+                                  "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                    " +
+                                    _vm._s(sem.name) +
+                                    "\n                                "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.semester_arr,
+                                  expression: "semester_arr"
+                                }
+                              ],
+                              attrs: { name: "semester[]", type: "checkbox" },
+                              domProps: {
+                                value: sem.id,
+                                checked: Array.isArray(_vm.semester_arr)
+                                  ? _vm._i(_vm.semester_arr, sem.id) > -1
+                                  : _vm.semester_arr
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.semester_arr,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = sem.id,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.semester_arr = $$a.concat([$$v]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.semester_arr = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.semester_arr = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _c("br")
+                          ])
+                        ]
+                      )
+                    }),
                     _vm._v(" "),
-                    !_vm.updating_ay
+                    !_vm.edit_ay.creating
                       ? _c(
                           "button",
                           {
                             staticClass:
                               "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
                             attrs: { type: "button" },
-                            on: { click: _vm.updateAy }
+                            on: {
+                              click: function($event) {
+                                return _vm.addSemesterToAy(_vm.edit_ay)
+                              }
+                            }
                           },
                           [
                             _vm._v(
-                              "\n                                Update\n                            "
+                              "\n                            Add\n                        "
                             )
                           ]
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm.updating_ay
+                    _vm.edit_ay.creating
                       ? _c("img", {
                           attrs: {
                             width: "30",
@@ -39209,311 +39683,14 @@ var render = function() {
                           }
                         })
                       : _vm._e()
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _vm.show_loading
-                ? _c("div", { staticClass: "text-center" }, [
-                    _c("img", {
-                      attrs: {
-                        width: "40",
-                        height: "40",
-                        src: "/img/loading.gif"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("Getting Information .. ")])
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c("v-dialog")
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "w-full mb-5" }, [
-            _vm.errors
-              ? _c(
-                  "div",
-                  { staticClass: "pb-4" },
-                  _vm._l(_vm.errors, function(error) {
-                    return _c("p", { staticClass: "text-red" }, [
-                      _vm._v(_vm._s(error))
-                    ])
-                  }),
-                  0
+                  ],
+                  2
                 )
-              : _vm._e(),
-            _vm._v(" "),
-            _c("h2", [_vm._v("Semester")]),
-            _vm._v(" "),
-            _c("form", { staticClass: "w-full max-w-md" }, [
-              _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
-                _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass:
-                        "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
-                      attrs: { for: "semester-name" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                                Name\n                            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.semester.name,
-                        expression: "semester.name"
-                      }
-                    ],
-                    staticClass:
-                      "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
-                    attrs: {
-                      name: "name",
-                      id: "semester-name",
-                      type: "text",
-                      placeholder: "Name"
-                    },
-                    domProps: { value: _vm.semester.name },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.semester, "name", $event.target.value)
-                      }
-                    }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              !_vm.semester.creating
-                ? _c(
-                    "button",
-                    {
-                      staticClass:
-                        "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                      attrs: { type: "button" },
-                      on: { click: _vm.createSemester }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        Create\n                    "
-                      )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.semester.creating
-                ? _c("img", {
-                    attrs: {
-                      width: "30",
-                      height: "30",
-                      src: "/img/loading.gif"
-                    }
-                  })
-                : _vm._e()
+              ])
             ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "w-full" },
-            [
-              _vm.semesters && !_vm.semester.show_loading
-                ? _c(
-                    "table",
-                    {
-                      staticClass: "text-left m-4 w-full",
-                      staticStyle: { "border-collapse": "collapse" }
-                    },
-                    [
-                      _vm._m(2),
-                      _vm._v(" "),
-                      _c(
-                        "tbody",
-                        _vm._l(_vm.semesters, function(sem) {
-                          return _c(
-                            "tr",
-                            { staticClass: "hover:bg-blue-lightest" },
-                            [
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "py-4 px-6 border-b border-grey-light"
-                                },
-                                [_vm._v(_vm._s(sem.name))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "py-4 px-6 border-b border-grey-light"
-                                },
-                                [_vm._v(_vm._s(sem.slug))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "py-4 px-6 border-b border-grey-light"
-                                },
-                                [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "bg-orange rounded p-1 text-sm pl-2 pr-2",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.editSemesterModal(sem)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Edit")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "bg-red rounded p-1 text-sm pl-2 pr-2",
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.deleteSemesterAlert(sem)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Delete")]
-                                  )
-                                ]
-                              )
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("modal", { attrs: { name: "edit-semester-modal" } }, [
-                _c("div", { staticClass: "m-4" }, [
-                  _c("h2", { staticClass: "mb-2" }, [
-                    _vm._v(
-                      "Edit " + _vm._s(_vm.edit_semester.name) + " Semester"
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("form", { staticClass: "w-full max-w-md" }, [
-                    _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
-                      _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
-                        _c(
-                          "label",
-                          {
-                            staticClass:
-                              "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
-                            attrs: { for: "edit-semester-name" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                        Name\n                                    "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.edit_semester.name,
-                              expression: "edit_semester.name"
-                            }
-                          ],
-                          staticClass:
-                            "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
-                          attrs: {
-                            name: "name",
-                            id: "edit-semester-name",
-                            type: "text",
-                            placeholder: "Name"
-                          },
-                          domProps: { value: _vm.edit_semester.name },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.edit_semester,
-                                "name",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    !_vm.edit_semester.creating
-                      ? _c(
-                          "button",
-                          {
-                            staticClass:
-                              "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                            attrs: { type: "button" },
-                            on: { click: _vm.updateSemester }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                Update\n                            "
-                            )
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.edit_semester.creating
-                      ? _c("img", {
-                          attrs: {
-                            width: "30",
-                            height: "30",
-                            src: "/img/loading.gif"
-                          }
-                        })
-                      : _vm._e()
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _vm.semester.show_loading
-                ? _c("div", { staticClass: "text-center" }, [
-                    _c("img", {
-                      attrs: {
-                        width: "40",
-                        height: "40",
-                        src: "/img/loading.gif"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("Getting Information .. ")])
-                  ])
-                : _vm._e()
-            ],
-            1
-          )
-        ])
+          ],
+          1
+        )
       ],
       1
     )

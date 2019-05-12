@@ -54,6 +54,7 @@
                             <td class="py-4 px-6 border-b border-grey-light">{{academic_year.from_date}}</td>
                             <td class="py-4 px-6 border-b border-grey-light">{{academic_year.to_date}}</td>
                             <td class="py-4 px-6 border-b border-grey-light">
+                                <button v-on:click="addSemesterModal(academic_year)" class="bg-green rounded p-1 text-sm pl-2 pr-2">Add Semester</button>
                                 <button v-on:click="editAcademicYearModal(academic_year)" class="bg-orange rounded p-1 text-sm pl-2 pr-2">Edit</button>
                                 <button v-on:click="deleteAlert(academic_year)" class="bg-red rounded p-1 text-sm pl-2 pr-2">Delete</button>
                             </td>
@@ -175,6 +176,28 @@
                 </div>
                 <!--Semester table End-->
 
+                <!--Academic Year Semester Start-->
+                <modal name="add-semester-modal">
+                    <div class="m-4">
+                        <h2 class="mb-2">Add Semester in AY {{ edit_ay.from_date }} {{ edit_ay.to_date }}</h2>
+                        <form class="w-full max-w-md">
+                            <div v-for="sem in semesters" class="flex flex-wrap -mx-3 mb-6">
+                                <div class="w-full md:w-1/2 px-3">
+                                    <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                        {{sem.name}}
+                                    </label>
+                                    <input v-bind:value="sem.id"  v-model="semester_arr" name="semester[]" type="checkbox"><br>
+                                </div>
+                            </div>
+                            <button v-if="!edit_ay.creating" v-on:click="addSemesterToAy(edit_ay)" class="bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                                Add
+                            </button>
+                            <img v-if="edit_ay.creating" width="30" height="30" src="/img/loading.gif">
+
+                        </form>
+                    </div>
+                </modal>
+                <!--Academic Year Semester End-->
             </div>
         </main>
     </div>
@@ -210,6 +233,7 @@
                     show_loading: true,
                 },
                 semesters: [],
+                semester_arr: [],
             };
         },
         mounted() {
@@ -272,6 +296,17 @@
             editSemesterModal(semester) {
                 this.edit_semester = semester;
                 this.$modal.show('edit-semester-modal');
+            },
+            addSemesterModal(academic_year) {
+                this.edit_ay = academic_year;
+                this.$modal.show('add-semester-modal');
+            },
+            addSemesterToAy(edit_ay) {
+                api.call('post', `/api/admin/academic-year-semester/${edit_ay.id}/store`, {semester_arr: this.semester_arr}).then(response=>{
+                    if( response.data.status == 422 ) {
+                        alert('Semester already exist in ' + edit_ay.from_date + ' - ' + edit_ay.to_date);
+                    }
+                });
             },
             updateAy() {
                 this.updating_ay = true;
