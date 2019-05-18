@@ -72,5 +72,9 @@ Route::middleware('auth:api', 'role:admin')->group(function () {
         //Section
         Route::post('/section/store', 'API\Admin\SectionController@store');
         Route::get('/sections', 'API\Admin\SectionController@get');
+
+        //Classroom
+        Route::post('/classroom/store', 'API\Admin\ClassroomController@store');
+        Route::get('/classroom', 'API\Admin\SectionController@get');
     });
 });
