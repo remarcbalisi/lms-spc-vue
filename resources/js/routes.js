@@ -11,6 +11,8 @@ import AdminCourseList from "./components/Admin/Course/List";
 import AdminAySemesterView from "./components/Admin/AyAndSemester/View";
 import AdminSubjectCreate from "./components/Admin/Subject/Create";
 import AdminSubjectList from "./components/Admin/Subject/List";
+import AdminSectionCreate from "./components/Admin/Section/Create";
+import AdminSectionList from "./components/Admin/Section/List";
 
 export default {
     mode: 'history',
@@ -89,6 +91,18 @@ export default {
             path: '/admin/subject/list',
             name: 'admin_subject_list',
             component: AdminSubjectList,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/section/create',
+            name: 'admin_section_create',
+            component: AdminSectionCreate,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/section/list',
+            name: 'admin_section_list',
+            component: AdminSectionList,
             meta: { middlewareAuth: true }
         },
     ]
