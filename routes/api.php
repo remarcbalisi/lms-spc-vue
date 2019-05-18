@@ -64,5 +64,8 @@ Route::middleware('auth:api', 'role:admin')->group(function () {
         //Academic Year Semester
         Route::post('/academic-year-semester/{academic_year_id}/store', 'API\Admin\AcademicYearSemesterController@store');
         Route::get('/academic-year-semester', 'API\Admin\AcademicYearSemesterController@get');
+
+        //Subject
+        Route::post('/subject/store', 'API\Admin\SubjectController@store');
     });
 });
