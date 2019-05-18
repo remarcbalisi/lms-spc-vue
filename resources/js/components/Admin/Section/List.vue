@@ -7,25 +7,21 @@
             <admin-side-bar></admin-side-bar>
             <div class="primary flex-1">
                 <h2>Subjects List</h2>
-                <table v-if="subjects && !show_loading" class="text-left m-4 w-full" style="border-collapse:collapse">
+                <table v-if="sections && !show_loading" class="text-left m-4 w-full" style="border-collapse:collapse">
                     <thead>
                     <tr>
                         <th class="py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light">Name</th>
                         <th class="py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light">Slug</th>
-                        <th class="py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light">Code</th>
-                        <th class="py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light">Offered From</th>
                         <th class="py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="subject in subjects" class="hover:bg-blue-lightest">
-                        <td class="py-4 px-6 border-b border-grey-light">{{subject.name}}</td>
-                        <td class="py-4 px-6 border-b border-grey-light">{{subject.slug}}</td>
-                        <td class="py-4 px-6 border-b border-grey-light">{{subject.code}}</td>
-                        <td class="py-4 px-6 border-b border-grey-light">{{subject.college.name}}</td>
+                    <tr v-for="section in sections" class="hover:bg-blue-lightest">
+                        <td class="py-4 px-6 border-b border-grey-light">{{section.name}}</td>
+                        <td class="py-4 px-6 border-b border-grey-light">{{section.slug}}</td>
                         <td class="py-4 px-6 border-b border-grey-light">
-                            <button v-on:click="editModal(subject)" class="bg-orange rounded p-1 text-sm pl-2 pr-2">Edit</button>
-                            <button v-on:click="deleteAlert(subject)" class="bg-red rounded p-1 text-sm pl-2 pr-2">Delete</button>
+                            <button v-on:click="editModal(section)" class="bg-orange rounded p-1 text-sm pl-2 pr-2">Edit</button>
+                            <button v-on:click="deleteAlert(section)" class="bg-red rounded p-1 text-sm pl-2 pr-2">Delete</button>
                         </td>
                     </tr>
                     </tbody>
@@ -33,17 +29,17 @@
 
                 <modal name="edit-modal">
                     <div class="m-4">
-                        <h2 class="mb-2">Edit subject {{ edit_subject.name }}</h2>
+                        <h2 class="mb-2">Edit section {{ edit_section.name }}</h2>
                         <form class="w-full max-w-md">
                             <div class="flex flex-wrap -mx-3 mb-6">
                                 <div class="w-full md:w-1/2 px-3">
-                                    <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="subject-name">
-                                        Subject Name
+                                    <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="section-name">
+                                        Section Name
                                     </label>
-                                    <input v-model="edit_subject.name" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" name="name" id="subject-name" type="text" placeholder="Subject Name">
+                                    <input v-model="edit_section.name" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" name="name" id="section-name" type="text" placeholder="Section Name">
                                 </div>
                             </div>
-                            <button v-if="!updating" v-on:click="update(edit_subject.id)" class="bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                            <button v-if="!updating" v-on:click="update(edit_section.id)" class="bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                                 Update
                             </button>
                             <button v-if="!updating" v-on:click="$modal.hide('edit-modal')" class="bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
@@ -74,8 +70,8 @@
                 user: auth.user,
                 errors: [],
                 show_loading : true,
-                subjects: [],
-                edit_subject: {},
+                sections: [],
+                edit_section: {},
                 updating: false,
             };
         },
@@ -87,15 +83,14 @@
             Event.$on('userLoggedOut', () => {
                 this.$router.push('/login');
             });
-            this.getSubjects();
+            this.getSections();
         },
         methods: {
-            getSubjects() {
-                api.call('get', '/api/admin/subjects').then(response=>{
+            getSections() {
+                api.call('get', '/api/admin/sections').then(response=>{
                    if(response.status === 200) {
                        this.show_loading = false;
-                       this.subjects = response.data.data;
-                       console.log(response);
+                       this.sections = response.data.data;
                    }
                 });
             },

@@ -3262,10 +3262,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3273,8 +3269,8 @@ __webpack_require__.r(__webpack_exports__);
       user: auth.user,
       errors: [],
       show_loading: true,
-      subjects: [],
-      edit_subject: {},
+      sections: [],
+      edit_section: {},
       updating: false
     };
   },
@@ -3288,17 +3284,16 @@ __webpack_require__.r(__webpack_exports__);
     Event.$on('userLoggedOut', function () {
       _this.$router.push('/login');
     });
-    this.getSubjects();
+    this.getSections();
   },
   methods: {
-    getSubjects: function getSubjects() {
+    getSections: function getSections() {
       var _this2 = this;
 
-      api.call('get', '/api/admin/subjects').then(function (response) {
+      api.call('get', '/api/admin/sections').then(function (response) {
         if (response.status === 200) {
           _this2.show_loading = false;
-          _this2.subjects = response.data.data;
-          console.log(response);
+          _this2.sections = response.data.data;
         }
       });
     },
@@ -42078,7 +42073,7 @@ var render = function() {
           [
             _c("h2", [_vm._v("Subjects List")]),
             _vm._v(" "),
-            _vm.subjects && !_vm.show_loading
+            _vm.sections && !_vm.show_loading
               ? _c(
                   "table",
                   {
@@ -42090,7 +42085,7 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      _vm._l(_vm.subjects, function(subject) {
+                      _vm._l(_vm.sections, function(section) {
                         return _c(
                           "tr",
                           { staticClass: "hover:bg-blue-lightest" },
@@ -42101,7 +42096,7 @@ var render = function() {
                                 staticClass:
                                   "py-4 px-6 border-b border-grey-light"
                               },
-                              [_vm._v(_vm._s(subject.name))]
+                              [_vm._v(_vm._s(section.name))]
                             ),
                             _vm._v(" "),
                             _c(
@@ -42110,25 +42105,7 @@ var render = function() {
                                 staticClass:
                                   "py-4 px-6 border-b border-grey-light"
                               },
-                              [_vm._v(_vm._s(subject.slug))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass:
-                                  "py-4 px-6 border-b border-grey-light"
-                              },
-                              [_vm._v(_vm._s(subject.code))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass:
-                                  "py-4 px-6 border-b border-grey-light"
-                              },
-                              [_vm._v(_vm._s(subject.college.name))]
+                              [_vm._v(_vm._s(section.slug))]
                             ),
                             _vm._v(" "),
                             _c(
@@ -42145,7 +42122,7 @@ var render = function() {
                                       "bg-orange rounded p-1 text-sm pl-2 pr-2",
                                     on: {
                                       click: function($event) {
-                                        return _vm.editModal(subject)
+                                        return _vm.editModal(section)
                                       }
                                     }
                                   },
@@ -42159,7 +42136,7 @@ var render = function() {
                                       "bg-red rounded p-1 text-sm pl-2 pr-2",
                                     on: {
                                       click: function($event) {
-                                        return _vm.deleteAlert(subject)
+                                        return _vm.deleteAlert(section)
                                       }
                                     }
                                   },
@@ -42179,7 +42156,7 @@ var render = function() {
             _c("modal", { attrs: { name: "edit-modal" } }, [
               _c("div", { staticClass: "m-4" }, [
                 _c("h2", { staticClass: "mb-2" }, [
-                  _vm._v("Edit subject " + _vm._s(_vm.edit_subject.name))
+                  _vm._v("Edit section " + _vm._s(_vm.edit_section.name))
                 ]),
                 _vm._v(" "),
                 _c("form", { staticClass: "w-full max-w-md" }, [
@@ -42190,11 +42167,11 @@ var render = function() {
                         {
                           staticClass:
                             "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
-                          attrs: { for: "subject-name" }
+                          attrs: { for: "section-name" }
                         },
                         [
                           _vm._v(
-                            "\n                                    Subject Name\n                                "
+                            "\n                                    Section Name\n                                "
                           )
                         ]
                       ),
@@ -42204,26 +42181,26 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.edit_subject.name,
-                            expression: "edit_subject.name"
+                            value: _vm.edit_section.name,
+                            expression: "edit_section.name"
                           }
                         ],
                         staticClass:
                           "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
                         attrs: {
                           name: "name",
-                          id: "subject-name",
+                          id: "section-name",
                           type: "text",
-                          placeholder: "Subject Name"
+                          placeholder: "Section Name"
                         },
-                        domProps: { value: _vm.edit_subject.name },
+                        domProps: { value: _vm.edit_section.name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.edit_subject,
+                              _vm.edit_section,
                               "name",
                               $event.target.value
                             )
@@ -42242,7 +42219,7 @@ var render = function() {
                           attrs: { type: "button" },
                           on: {
                             click: function($event) {
-                              return _vm.update(_vm.edit_subject.id)
+                              return _vm.update(_vm.edit_section.id)
                             }
                           }
                         },
@@ -42344,24 +42321,6 @@ var staticRenderFns = [
               "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
           },
           [_vm._v("Slug")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass:
-              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
-          },
-          [_vm._v("Code")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass:
-              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
-          },
-          [_vm._v("Offered From")]
         ),
         _vm._v(" "),
         _c(

@@ -43,4 +43,11 @@ class SectionController extends Controller
             'status' => 200,
         ]);
     }
+
+    public function get() {
+        return response()->json([
+            'message' => 'Successfully get all sections',
+            'data' => Section::get(),
+        ]);
+    }
 }
