@@ -13,4 +13,8 @@ class Subject extends Model
     protected $fillable = [
         'offered_from', 'name', 'code', 'slug'
     ];
+
+    public function college() {
+        return $this->BelongsTo('App\College', 'offered_from', 'id');
+    }
 }

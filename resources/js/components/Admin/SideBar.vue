@@ -89,6 +89,11 @@
                         Create
                     </router-link>
                 </li>
+                <li class="pb-4">
+                    <router-link class="text-black no-underline" to="/admin/subject/list">
+                        List
+                    </router-link>
+                </li>
             </ul>
         </section>
     </aside>

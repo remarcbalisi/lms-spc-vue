@@ -67,5 +67,6 @@ Route::middleware('auth:api', 'role:admin')->group(function () {
 
         //Subject
         Route::post('/subject/store', 'API\Admin\SubjectController@store');
+        Route::get('/subjects', 'API\Admin\SubjectController@get');
     });
 });

@@ -38,4 +38,18 @@ class SubjectController extends Controller
            'status' => 200
         ]);
     }
+
+    public function get() {
+
+        $subjects = Subject::get();
+        foreach( $subjects as $subject ) {
+            $subject['college'] = $subject->college()->first();
+        }
+        return response()->json([
+            'message' => 'Successfully get all subjects',
+            'data' => $subjects,
+            'status' => 200
+        ]);
+
+    }
 }
