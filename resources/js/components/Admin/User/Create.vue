@@ -28,6 +28,12 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="email">
+                                Email
+                            </label>
+                            <input v-model="new_user.email" class="appearance-none block w-full bg-grey-lighter text-grey-darker border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" name="email" id="email" type="email" placeholder="Email">
+                        </div>
                         <div class="w-full md:w-1/2 px-3">
                             <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="password">
                                 Password
@@ -37,7 +43,7 @@
                         </div>
                         <div class="w-full md:w-1/2 px-3">
                             <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="confirm-password">
-                                Password
+                                Confirm Password
                             </label>
                             <input v-model="new_user.password_confirmation" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-grey" name="password_confirmation" id="confirm-password" type="password" placeholder="******************">
                             <p v-if="new_user.password != new_user.password_confirmation" class="text-red text-xs italic">Password didn't match!</p>
@@ -63,9 +69,7 @@
                             </label>
                             <div class="relative">
                                 <select v-model="new_user.course_id" class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-state">
-                                    <option value="cs">New Mexico</option>
-                                    <option>Missouri</option>
-                                    <option>Texas</option>
+                                    <option v-for="course in courses" v-bind:value="course.id">{{ course.name }}</option>
                                 </select>
                                 <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -73,7 +77,9 @@
                             </div>
                         </div>
                     </div>
-                    <button v-on:click="store" type="button">Create</button>
+                    <button v-on:click="store" class="bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        Create
+                    </button>
                 </form>
             </div>
         </main>
@@ -94,9 +100,11 @@
                     course_id: '',
                     password: '',
                     password_confirmation: '',
+                    email: '',
                 },
                 empty_fields: [],
                 roles : [],
+                courses: [],
             };
         },
         mounted() {
@@ -108,6 +116,7 @@
                 this.$router.push('/login');
             });
             this.getRoles();
+            this.getCourses();
         },
         methods: {
             getRoles() {
@@ -116,6 +125,11 @@
                         this.show_loading = false;
                         this.roles = response.data.data;
                     }
+                });
+            },
+            getCourses() {
+                api.call('get','/api/admin/courses').then(response=>{
+                    this.courses = response.data.data;
                 });
             },
             logout() {
@@ -146,7 +160,6 @@
             },
             store() {
                 this.validate();
-                console.log();
                 if( this.validate().length == 0 ) {
                     api.call('post', `/api/admin/users/store`, this.new_user).then(response=>{
                         if(response.status == 200) {

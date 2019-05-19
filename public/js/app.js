@@ -4278,6 +4278,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4290,10 +4296,12 @@ __webpack_require__.r(__webpack_exports__);
         role_id: '',
         course_id: '',
         password: '',
-        password_confirmation: ''
+        password_confirmation: '',
+        email: ''
       },
       empty_fields: [],
-      roles: []
+      roles: [],
+      courses: []
     };
   },
   mounted: function mounted() {
@@ -4307,6 +4315,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.$router.push('/login');
     });
     this.getRoles();
+    this.getCourses();
   },
   methods: {
     getRoles: function getRoles() {
@@ -4319,22 +4328,29 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    getCourses: function getCourses() {
+      var _this3 = this;
+
+      api.call('get', '/api/admin/courses').then(function (response) {
+        _this3.courses = response.data.data;
+      });
+    },
     logout: function logout() {
       auth.logout();
     },
     validate: function validate() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.empty_fields = [];
       Object.keys(this.new_user).forEach(function (key) {
-        var value = _this3.new_user[key];
+        var value = _this4.new_user[key];
 
         if (!value) {
-          if (key == "course_id" && _this3.new_user.role_id == "learner") {
-            _this3.empty_fields.push(key);
-          } else if (key == "course_id" && _this3.new_user.role_id != "learner") {//
+          if (key == "course_id" && _this4.new_user.role_id == "learner") {
+            _this4.empty_fields.push(key);
+          } else if (key == "course_id" && _this4.new_user.role_id != "learner") {//
           } else {
-            _this3.empty_fields.push(key);
+            _this4.empty_fields.push(key);
           }
         }
       });
@@ -4348,7 +4364,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     store: function store() {
       this.validate();
-      console.log();
 
       if (this.validate().length == 0) {
         api.call('post', "/api/admin/users/store", this.new_user).then(function (response) {
@@ -44543,6 +44558,50 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+              _c("div", { staticClass: "w-full md:w-1/3 px-3 mb-6 md:mb-0" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass:
+                      "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                    attrs: { for: "email" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                            Email\n                        "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.new_user.email,
+                      expression: "new_user.email"
+                    }
+                  ],
+                  staticClass:
+                    "appearance-none block w-full bg-grey-lighter text-grey-darker border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white",
+                  attrs: {
+                    name: "email",
+                    id: "email",
+                    type: "email",
+                    placeholder: "Email"
+                  },
+                  domProps: { value: _vm.new_user.email },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.new_user, "email", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
               _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
                 _c(
                   "label",
@@ -44601,7 +44660,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                            Password\n                        "
+                      "\n                            Confirm Password\n                        "
                     )
                   ]
                 ),
@@ -44789,15 +44848,14 @@ var render = function() {
                               }
                             }
                           },
-                          [
-                            _c("option", { attrs: { value: "cs" } }, [
-                              _vm._v("New Mexico")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Missouri")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Texas")])
-                          ]
+                          _vm._l(_vm.courses, function(course) {
+                            return _c(
+                              "option",
+                              { domProps: { value: course.id } },
+                              [_vm._v(_vm._s(course.name))]
+                            )
+                          }),
+                          0
                         ),
                         _vm._v(" "),
                         _c(
@@ -44835,8 +44893,13 @@ var render = function() {
             _vm._v(" "),
             _c(
               "button",
-              { attrs: { type: "button" }, on: { click: _vm.store } },
-              [_vm._v("Create")]
+              {
+                staticClass:
+                  "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                attrs: { type: "button" },
+                on: { click: _vm.store }
+              },
+              [_vm._v("\n                    Create\n                ")]
             )
           ])
         ])
