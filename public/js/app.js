@@ -2450,6 +2450,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2458,8 +2466,13 @@ __webpack_require__.r(__webpack_exports__);
       errors: [],
       show_loading: true,
       classrooms: [],
-      edit_classroom: {},
-      updating: false
+      classroom_user: {
+        user_id: null,
+        classroom_id: null,
+        is_enrolled: null
+      },
+      updating: false,
+      lecturers: []
     };
   },
   mounted: function mounted() {
@@ -2489,30 +2502,51 @@ __webpack_require__.r(__webpack_exports__);
       this.edit_role = role;
       this.$modal.show('edit-modal');
     },
-    getFacultyUsers: function getFacultyUsers() {},
+    getFacultyUsers: function getFacultyUsers() {
+      var _this3 = this;
+
+      api.call('get', '/api/admin/users/by-role/lecturer').then(function (response) {
+        _this3.lecturers = response.data.data;
+      });
+    },
     addFacultyModal: function addFacultyModal() {
-      this.$modal.show('add-faculty-modal');
+      var classroom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var store = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (store) {
+        api.call('post', '/api/admin/classroom-user/store', this.classroom_user).then(function (response) {
+          if (response.status === 200) {
+            alert(response.data.message);
+          } else {
+            alert(response.data.message);
+          }
+        });
+      } else {
+        this.classroom_user.classroom_id = classroom.id;
+        this.getFacultyUsers();
+        this.$modal.show('add-faculty-modal');
+      }
     },
     update: function update(role_id) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.updating = true;
       api.call('post', "/api/admin/roles/update/".concat(role_id), {
         name: this.edit_role.name
       }).then(function (response) {
         if (response.status === 200) {
-          _this3.updating = false;
+          _this4.updating = false;
 
-          _this3.$modal.hide('edit-modal');
+          _this4.$modal.hide('edit-modal');
 
-          _this3.getRoles();
+          _this4.getRoles();
 
           alert(response.data.message);
         }
       });
     },
     deleteAlert: function deleteAlert($role) {
-      var _this4 = this;
+      var _this5 = this;
 
       this.$modal.show('dialog', {
         title: 'Warning!',
@@ -2520,7 +2554,7 @@ __webpack_require__.r(__webpack_exports__);
         buttons: [{
           title: 'Deal with it',
           handler: function handler() {
-            _this4.destroy($role);
+            _this5.destroy($role);
           }
         }, {
           title: '',
@@ -2528,7 +2562,7 @@ __webpack_require__.r(__webpack_exports__);
           "default": true,
           // Will be triggered by default if 'Enter' pressed.
           handler: function handler() {
-            _this4.destroy($role);
+            _this5.destroy($role);
           } // Button click handler
 
         }, {
@@ -2537,15 +2571,15 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     destroy: function destroy($role) {
-      var _this5 = this;
+      var _this6 = this;
 
       api.call('get', "/api/admin/roles/destroy/".concat($role.id)).then(function (response) {
         if (response.status === 200) {
-          _this5.$modal.hide('edit-modal');
+          _this6.$modal.hide('edit-modal');
 
-          _this5.getRoles();
+          _this6.getRoles();
 
-          _this5.$modal.hide('dialog');
+          _this6.$modal.hide('dialog');
 
           alert(response.data.message);
         }
@@ -41213,7 +41247,7 @@ var render = function() {
                                       "bg-blue rounded p-1 text-sm pl-2 pr-2",
                                     on: {
                                       click: function($event) {
-                                        return _vm.addFacultyModal()
+                                        return _vm.addFacultyModal(classroom)
                                       }
                                     }
                                   },
@@ -41263,56 +41297,6 @@ var render = function() {
                 _c("h2", { staticClass: "mb-2" }, [_vm._v("Edit Classroom")]),
                 _vm._v(" "),
                 _c("form", { staticClass: "w-full max-w-md" }, [
-                  _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
-                    _c("div", { staticClass: "w-full md:w-1/2 px-3" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass:
-                            "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
-                          attrs: { for: "role-name" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                                    Role Name\n                                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.edit_classroom.name,
-                            expression: "edit_classroom.name"
-                          }
-                        ],
-                        staticClass:
-                          "appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey",
-                        attrs: {
-                          name: "name",
-                          id: "role-name",
-                          type: "text",
-                          placeholder: "Role Name"
-                        },
-                        domProps: { value: _vm.edit_classroom.name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.edit_classroom,
-                              "name",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
                   !_vm.updating
                     ? _c(
                         "button",
@@ -41320,11 +41304,7 @@ var render = function() {
                           staticClass:
                             "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
                           attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              return _vm.update(_vm.edit_classroom.id)
-                            }
-                          }
+                          on: { click: function($event) {} }
                         },
                         [
                           _vm._v(
@@ -41373,6 +41353,111 @@ var render = function() {
                 _c("h2", { staticClass: "mb-2" }, [_vm._v("Add Faculty")]),
                 _vm._v(" "),
                 _c("form", { staticClass: "w-full max-w-md" }, [
+                  _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                    _c(
+                      "div",
+                      { staticClass: "w-full md:w-1/2 px-3 mb-6 md:mb-0" },
+                      [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                            attrs: { for: "faculty" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Faculty\n                                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "relative" }, [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classroom_user.user_id,
+                                  expression: "classroom_user.user_id"
+                                }
+                              ],
+                              staticClass:
+                                "block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                              attrs: { name: "faculty", id: "faculty" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.classroom_user,
+                                    "user_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.lecturers, function(lecturer) {
+                              return _c(
+                                "option",
+                                { domProps: { value: lecturer.id } },
+                                [
+                                  _vm._v(
+                                    _vm._s(
+                                      lecturer.first_name +
+                                        " " +
+                                        lecturer.last_name
+                                    )
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker"
+                            },
+                            [
+                              _c(
+                                "svg",
+                                {
+                                  staticClass: "fill-current h-4 w-4",
+                                  attrs: {
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    viewBox: "0 0 20 20"
+                                  }
+                                },
+                                [
+                                  _c("path", {
+                                    attrs: {
+                                      d:
+                                        "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                    }
+                                  })
+                                ]
+                              )
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
                   !_vm.updating
                     ? _c(
                         "button",
@@ -41382,13 +41467,13 @@ var render = function() {
                           attrs: { type: "button" },
                           on: {
                             click: function($event) {
-                              return _vm.update(_vm.edit_classroom.id)
+                              return _vm.addFacultyModal(null, true)
                             }
                           }
                         },
                         [
                           _vm._v(
-                            "\n                            Update\n                        "
+                            "\n                            Add\n                        "
                           )
                         ]
                       )
@@ -41403,7 +41488,7 @@ var render = function() {
                           attrs: { type: "button" },
                           on: {
                             click: function($event) {
-                              return _vm.$modal.hide("edit-modal")
+                              return _vm.$modal.hide("add-faculty-modal")
                             }
                           }
                         },
