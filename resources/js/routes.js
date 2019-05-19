@@ -13,6 +13,8 @@ import AdminSubjectCreate from "./components/Admin/Subject/Create";
 import AdminSubjectList from "./components/Admin/Subject/List";
 import AdminSectionCreate from "./components/Admin/Section/Create";
 import AdminSectionList from "./components/Admin/Section/List";
+import AdminClassroomCreate from "./components/Admin/Classroom/Create";
+import AdminClassroomList from "./components/Admin/Classroom/List";
 
 export default {
     mode: 'history',
@@ -103,6 +105,18 @@ export default {
             path: '/admin/section/list',
             name: 'admin_section_list',
             component: AdminSectionList,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/classroom/create',
+            name: 'admin_classroom_create',
+            component: AdminClassroomCreate,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/classroom/list',
+            name: 'admin_classroom_list',
+            component: AdminClassroomList,
             meta: { middlewareAuth: true }
         },
     ]
