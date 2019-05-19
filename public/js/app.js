@@ -2431,6 +2431,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2438,8 +2457,8 @@ __webpack_require__.r(__webpack_exports__);
       user: auth.user,
       errors: [],
       show_loading: true,
-      roles: [],
-      edit_role: {},
+      classrooms: [],
+      edit_classroom: {},
       updating: false
     };
   },
@@ -2453,22 +2472,25 @@ __webpack_require__.r(__webpack_exports__);
     Event.$on('userLoggedOut', function () {
       _this.$router.push('/login');
     });
-    this.getRoles();
+    this.getClassrooms();
   },
   methods: {
-    getRoles: function getRoles() {
+    getClassrooms: function getClassrooms() {
       var _this2 = this;
 
-      api.call('get', '/api/admin/roles').then(function (response) {
+      api.call('get', '/api/admin/classrooms').then(function (response) {
         if (response.status === 200) {
           _this2.show_loading = false;
-          _this2.roles = response.data.data;
+          _this2.classrooms = response.data.data;
         }
       });
     },
     editModal: function editModal(role) {
       this.edit_role = role;
       this.$modal.show('edit-modal');
+    },
+    addFacultyModal: function addFacultyModal() {
+      this.$modal.show('add-faculty-modal');
     },
     update: function update(role_id) {
       var _this3 = this;
@@ -41109,9 +41131,9 @@ var render = function() {
           "div",
           { staticClass: "primary flex-1" },
           [
-            _c("h2", [_vm._v("Roles List")]),
+            _c("h2", [_vm._v("Classroom List")]),
             _vm._v(" "),
-            _vm.roles && !_vm.show_loading
+            _vm.classrooms && !_vm.show_loading
               ? _c(
                   "table",
                   {
@@ -41123,7 +41145,7 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      _vm._l(_vm.roles, function(role) {
+                      _vm._l(_vm.classrooms, function(classroom) {
                         return _c(
                           "tr",
                           { staticClass: "hover:bg-blue-lightest" },
@@ -41134,7 +41156,7 @@ var render = function() {
                                 staticClass:
                                   "py-4 px-6 border-b border-grey-light"
                               },
-                              [_vm._v(_vm._s(role.name))]
+                              [_vm._v(_vm._s(classroom.subject.name))]
                             ),
                             _vm._v(" "),
                             _c(
@@ -41143,7 +41165,22 @@ var render = function() {
                                 staticClass:
                                   "py-4 px-6 border-b border-grey-light"
                               },
-                              [_vm._v(_vm._s(role.slug))]
+                              [_vm._v(_vm._s(classroom.section.name))]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              {
+                                staticClass:
+                                  "py-4 px-6 border-b border-grey-light"
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    classroom.academic_yr_semester.full_name
+                                  )
+                                )
+                              ]
                             ),
                             _vm._v(" "),
                             _c(
@@ -41157,10 +41194,24 @@ var render = function() {
                                   "button",
                                   {
                                     staticClass:
+                                      "bg-blue rounded p-1 text-sm pl-2 pr-2",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.addFacultyModal()
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Add Faculty")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass:
                                       "bg-orange rounded p-1 text-sm pl-2 pr-2",
                                     on: {
                                       click: function($event) {
-                                        return _vm.editModal(role)
+                                        return _vm.editModal(classroom)
                                       }
                                     }
                                   },
@@ -41174,7 +41225,7 @@ var render = function() {
                                       "bg-red rounded p-1 text-sm pl-2 pr-2",
                                     on: {
                                       click: function($event) {
-                                        return _vm.deleteAlert(role)
+                                        return _vm.deleteAlert(classroom)
                                       }
                                     }
                                   },
@@ -41193,9 +41244,7 @@ var render = function() {
             _vm._v(" "),
             _c("modal", { attrs: { name: "edit-modal" } }, [
               _c("div", { staticClass: "m-4" }, [
-                _c("h2", { staticClass: "mb-2" }, [
-                  _vm._v("Edit role " + _vm._s(_vm.edit_role.name))
-                ]),
+                _c("h2", { staticClass: "mb-2" }, [_vm._v("Edit Classroom")]),
                 _vm._v(" "),
                 _c("form", { staticClass: "w-full max-w-md" }, [
                   _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
@@ -41219,8 +41268,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.edit_role.name,
-                            expression: "edit_role.name"
+                            value: _vm.edit_classroom.name,
+                            expression: "edit_classroom.name"
                           }
                         ],
                         staticClass:
@@ -41231,13 +41280,17 @@ var render = function() {
                           type: "text",
                           placeholder: "Role Name"
                         },
-                        domProps: { value: _vm.edit_role.name },
+                        domProps: { value: _vm.edit_classroom.name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.edit_role, "name", $event.target.value)
+                            _vm.$set(
+                              _vm.edit_classroom,
+                              "name",
+                              $event.target.value
+                            )
                           }
                         }
                       })
@@ -41253,7 +41306,67 @@ var render = function() {
                           attrs: { type: "button" },
                           on: {
                             click: function($event) {
-                              return _vm.update(_vm.edit_role.id)
+                              return _vm.update(_vm.edit_classroom.id)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Update\n                        "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  !_vm.updating
+                    ? _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.$modal.hide("edit-modal")
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Close\n                        "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.updating
+                    ? _c("img", {
+                        attrs: {
+                          width: "30",
+                          height: "30",
+                          src: "/img/loading.gif"
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("modal", { attrs: { name: "add-faculty-modal" } }, [
+              _c("div", { staticClass: "m-4" }, [
+                _c("h2", { staticClass: "mb-2" }, [_vm._v("Add Faculty")]),
+                _vm._v(" "),
+                _c("form", { staticClass: "w-full max-w-md" }, [
+                  !_vm.updating
+                    ? _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.update(_vm.edit_classroom.id)
                             }
                           }
                         },
@@ -41345,7 +41458,7 @@ var staticRenderFns = [
             staticClass:
               "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
           },
-          [_vm._v("Name")]
+          [_vm._v("Subject")]
         ),
         _vm._v(" "),
         _c(
@@ -41354,7 +41467,16 @@ var staticRenderFns = [
             staticClass:
               "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
           },
-          [_vm._v("Slug")]
+          [_vm._v("Section")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass:
+              "py-4 px-6 bg-grey-lighter font-sans font-medium uppercase text-sm text-grey border-b border-grey-light"
+          },
+          [_vm._v("Academic Year and Sem")]
         ),
         _vm._v(" "),
         _c(

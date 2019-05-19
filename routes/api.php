@@ -75,6 +75,10 @@ Route::middleware('auth:api', 'role:admin')->group(function () {
 
         //Classroom
         Route::post('/classroom/store', 'API\Admin\ClassroomController@store');
-        Route::get('/classroom', 'API\Admin\SectionController@get');
+        Route::get('/classrooms', 'API\Admin\ClassroomController@get');
+
+        //Classroom User
+        Route::post('/classroom-user/store', 'API\Admin\ClassroomUserController@store');
+        Route::get('/classroom-users', 'API\Admin\ClassroomUserController@get');
     });
 });

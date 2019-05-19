@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\Admin;
 
-use App\Classsroom;
+use App\Classroom;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -10,7 +10,7 @@ class ClassroomController extends Controller
 {
     public function store(Request $request) {
 
-        $classroom = Classsroom::withTrashed()
+        $classroom = Classroom::withTrashed()
             ->where([
                 'section_id' => $request->section_id,
                 'subject_id' => $request->subject_id,
@@ -41,7 +41,7 @@ class ClassroomController extends Controller
             'academic_yr_semester_id' => 'required'
         ]);
 
-        $new_classroom = new Classsroom();
+        $new_classroom = new Classroom;
         $new_classroom->section_id = $request->section_id;
         $new_classroom->subject_id = $request->subject_id;
         $new_classroom->academic_yr_semester_id = $request->academic_yr_semester_id;
@@ -50,6 +50,21 @@ class ClassroomController extends Controller
         return response()->json([
             'message' => 'Successfully created ' . $new_classroom->getFullName() . ' classroom',
             'status' => 200
+        ]);
+    }
+
+    public function get() {
+        $classrooms = Classroom::get();
+        foreach ( $classrooms as $classroom ) {
+            $classroom['section'] = $classroom->section()->first();
+            $classroom['subject'] = $classroom->subject()->first();
+            $classroom['academic_yr_semester'] = $classroom->academic_yr_semester()->first();
+            $classroom['academic_yr_semester']['full_name'] = $classroom->academic_yr_semester()->first()->getFullName();
+        }
+        return response()->json([
+           'message' => 'Successfully get all classrooms',
+           'data' => $classrooms,
+           'status' => 200
         ]);
     }
 }
