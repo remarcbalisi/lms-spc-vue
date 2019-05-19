@@ -30,6 +30,7 @@ Route::middleware('auth:api', 'role:admin')->group(function () {
 
         //User
         Route::post('/users/store', 'API\Admin\UserController@store');
+        Route::get('/users/by-role/{role_slug}', 'API\Admin\UserController@getAllUserByRole');
 
         //Role
         Route::post('/roles/store', 'API\Admin\RoleController@store');

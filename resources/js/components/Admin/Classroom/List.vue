@@ -117,6 +117,9 @@
                 this.edit_role = role;
                 this.$modal.show('edit-modal');
             },
+            getFacultyUsers() {
+
+            },
             addFacultyModal() {
                 this.$modal.show('add-faculty-modal');
             },

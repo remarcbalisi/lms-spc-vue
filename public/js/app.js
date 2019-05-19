@@ -2489,6 +2489,7 @@ __webpack_require__.r(__webpack_exports__);
       this.edit_role = role;
       this.$modal.show('edit-modal');
     },
+    getFacultyUsers: function getFacultyUsers() {},
     addFacultyModal: function addFacultyModal() {
       this.$modal.show('add-faculty-modal');
     },
