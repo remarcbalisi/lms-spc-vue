@@ -15,6 +15,7 @@ import AdminSectionCreate from "./components/Admin/Section/Create";
 import AdminSectionList from "./components/Admin/Section/List";
 import AdminClassroomCreate from "./components/Admin/Classroom/Create";
 import AdminClassroomList from "./components/Admin/Classroom/List";
+import AdminClassroomView from "./components/Admin/Classroom/View";
 
 export default {
     mode: 'history',
@@ -117,6 +118,12 @@ export default {
             path: '/admin/classroom/list',
             name: 'admin_classroom_list',
             component: AdminClassroomList,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/admin/classroom/view/:id',
+            name: 'admin_classroom_view',
+            component: AdminClassroomView,
             meta: { middlewareAuth: true }
         },
     ]

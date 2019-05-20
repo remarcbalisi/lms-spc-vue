@@ -30,4 +30,8 @@ class Classroom extends Model
     public function getFullName() {
         return $this->subject()->first()->name . ' ' . $this->section()->first()->name . ', ' . $this->academic_yr_semester()->first()->getFullName();
     }
+
+    public function classroom_users() {
+        return $this->hasMany('App\ClassroomUser', 'classroom_id', 'id');
+    }
 }

@@ -67,4 +67,23 @@ class ClassroomController extends Controller
            'status' => 200
         ]);
     }
+
+    public function viewById($classroom_id) {
+        $classroom = Classroom::where('id', $classroom_id)->first();
+        $classroom['full_name'] = $classroom->getFullName();
+
+        $classroom_users = [];
+        foreach( $classroom->classroom_users()->get() as $classroom_user ) {
+            $classroom_user['user'] = $classroom_user->user()->first();
+            $classroom_user['user']['role'] = $classroom_user->user()->first()->role()->first();
+            $classroom_user['user']['course'] = $classroom_user->user()->first()->course()->first() ? $classroom_user->user()->first()->course()->first() : null ;
+            array_push($classroom_users, $classroom_user);
+        }
+        $classroom['classroom_users'] = $classroom_users;
+        return response()->json([
+           'message' => 'Successfully get classroom!',
+           'data' => $classroom,
+           'status' => 200,
+        ]);
+    }
 }

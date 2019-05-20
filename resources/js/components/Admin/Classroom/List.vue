@@ -18,7 +18,11 @@
                     </thead>
                     <tbody>
                     <tr v-for="classroom in classrooms" class="hover:bg-blue-lightest">
-                        <td class="py-4 px-6 border-b border-grey-light">{{classroom.subject.name}}</td>
+                        <td class="py-4 px-6 border-b border-grey-light">
+                            <a href="javascript:;" v-on:click="viewClassroom(classroom)">
+                                {{classroom.subject.name}}
+                            </a>
+                        </td>
                         <td class="py-4 px-6 border-b border-grey-light">{{classroom.section.name}}</td>
                         <td class="py-4 px-6 border-b border-grey-light">{{classroom.academic_yr_semester.full_name}}</td>
                         <td class="py-4 px-6 border-b border-grey-light">
@@ -151,6 +155,9 @@
             this.getClassrooms();
         },
         methods: {
+            viewClassroom(classroom) {
+                this.$router.push(`/admin/classroom/view/${classroom.id}`);
+            },
             getClassrooms() {
                 api.call('get', '/api/admin/classrooms').then(response=>{
                    if(response.status === 200) {

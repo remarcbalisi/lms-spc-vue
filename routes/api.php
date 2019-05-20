@@ -77,6 +77,7 @@ Route::middleware('auth:api', 'role:admin')->group(function () {
         //Classroom
         Route::post('/classroom/store', 'API\Admin\ClassroomController@store');
         Route::get('/classrooms', 'API\Admin\ClassroomController@get');
+        Route::get('/classroom/{classroom_id}', 'API\Admin\ClassroomController@viewById');
 
         //Classroom User
         Route::post('/classroom-user/store', 'API\Admin\ClassroomUserController@store');
