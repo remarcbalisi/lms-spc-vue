@@ -2458,6 +2458,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2472,7 +2504,8 @@ __webpack_require__.r(__webpack_exports__);
         is_enrolled: null
       },
       updating: false,
-      lecturers: []
+      lecturers: [],
+      learners: []
     };
   },
   mounted: function mounted() {
@@ -2527,26 +2560,51 @@ __webpack_require__.r(__webpack_exports__);
         this.$modal.show('add-faculty-modal');
       }
     },
-    update: function update(role_id) {
+    getLearnerUsers: function getLearnerUsers() {
       var _this4 = this;
+
+      api.call('get', '/api/admin/users/by-role/learner').then(function (response) {
+        _this4.learners = response.data.data;
+      });
+    },
+    addLearnerModal: function addLearnerModal() {
+      var classroom = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var store = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (store) {
+        api.call('post', '/api/admin/classroom-user/store', this.classroom_user).then(function (response) {
+          if (response.status === 200) {
+            alert(response.data.message);
+          } else {
+            alert(response.data.message);
+          }
+        });
+      } else {
+        this.classroom_user.classroom_id = classroom.id;
+        this.getLearnerUsers();
+        this.$modal.show('add-learner-modal');
+      }
+    },
+    update: function update(role_id) {
+      var _this5 = this;
 
       this.updating = true;
       api.call('post', "/api/admin/roles/update/".concat(role_id), {
         name: this.edit_role.name
       }).then(function (response) {
         if (response.status === 200) {
-          _this4.updating = false;
+          _this5.updating = false;
 
-          _this4.$modal.hide('edit-modal');
+          _this5.$modal.hide('edit-modal');
 
-          _this4.getRoles();
+          _this5.getRoles();
 
           alert(response.data.message);
         }
       });
     },
     deleteAlert: function deleteAlert($role) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.$modal.show('dialog', {
         title: 'Warning!',
@@ -2554,7 +2612,7 @@ __webpack_require__.r(__webpack_exports__);
         buttons: [{
           title: 'Deal with it',
           handler: function handler() {
-            _this5.destroy($role);
+            _this6.destroy($role);
           }
         }, {
           title: '',
@@ -2562,7 +2620,7 @@ __webpack_require__.r(__webpack_exports__);
           "default": true,
           // Will be triggered by default if 'Enter' pressed.
           handler: function handler() {
-            _this5.destroy($role);
+            _this6.destroy($role);
           } // Button click handler
 
         }, {
@@ -2571,15 +2629,15 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     destroy: function destroy($role) {
-      var _this6 = this;
+      var _this7 = this;
 
       api.call('get', "/api/admin/roles/destroy/".concat($role.id)).then(function (response) {
         if (response.status === 200) {
-          _this6.$modal.hide('edit-modal');
+          _this7.$modal.hide('edit-modal');
 
-          _this6.getRoles();
+          _this7.getRoles();
 
-          _this6.$modal.hide('dialog');
+          _this7.$modal.hide('dialog');
 
           alert(response.data.message);
         }
@@ -41258,6 +41316,20 @@ var render = function() {
                                   "button",
                                   {
                                     staticClass:
+                                      "bg-green rounded p-1 text-sm pl-2 pr-2",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.addLearnerModal(classroom)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Add Student")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass:
                                       "bg-orange rounded p-1 text-sm pl-2 pr-2",
                                     on: {
                                       click: function($event) {
@@ -41489,6 +41561,171 @@ var render = function() {
                           on: {
                             click: function($event) {
                               return _vm.$modal.hide("add-faculty-modal")
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Close\n                        "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.updating
+                    ? _c("img", {
+                        attrs: {
+                          width: "30",
+                          height: "30",
+                          src: "/img/loading.gif"
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("modal", { attrs: { name: "add-learner-modal" } }, [
+              _c("div", { staticClass: "m-4" }, [
+                _c("h2", { staticClass: "mb-2" }, [_vm._v("Add Learner")]),
+                _vm._v(" "),
+                _c("form", { staticClass: "w-full max-w-md" }, [
+                  _c("div", { staticClass: "flex flex-wrap -mx-3 mb-6" }, [
+                    _c(
+                      "div",
+                      { staticClass: "w-full md:w-1/2 px-3 mb-6 md:mb-0" },
+                      [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2",
+                            attrs: { for: "learner" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Learner\n                                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "relative" }, [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classroom_user.user_id,
+                                  expression: "classroom_user.user_id"
+                                }
+                              ],
+                              staticClass:
+                                "block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-grey",
+                              attrs: { name: "learner", id: "learner" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.classroom_user,
+                                    "user_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.learners, function(learner) {
+                              return _c(
+                                "option",
+                                { domProps: { value: learner.id } },
+                                [
+                                  _vm._v(
+                                    _vm._s(
+                                      learner.first_name +
+                                        " " +
+                                        learner.last_name
+                                    )
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker"
+                            },
+                            [
+                              _c(
+                                "svg",
+                                {
+                                  staticClass: "fill-current h-4 w-4",
+                                  attrs: {
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    viewBox: "0 0 20 20"
+                                  }
+                                },
+                                [
+                                  _c("path", {
+                                    attrs: {
+                                      d:
+                                        "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                    }
+                                  })
+                                ]
+                              )
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  !_vm.updating
+                    ? _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.addLearnerModal(null, true)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Add\n                        "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  !_vm.updating
+                    ? _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-red-darker hover:bg-red-darkest text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.$modal.hide("add-learner-modal")
                             }
                           }
                         },

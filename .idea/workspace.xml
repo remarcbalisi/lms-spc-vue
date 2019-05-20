@@ -70,8 +70,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/js/components/Admin/Classroom/List.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="68" column="87" selection-start-line="68" selection-start-column="87" selection-end-line="68" selection-end-column="87" />
+            <state relative-caret-position="122">
+              <caret line="25" column="63" selection-start-line="25" selection-start-column="63" selection-end-line="25" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -512,12 +512,12 @@
       <workItem from="1558111648809" duration="364000" />
       <workItem from="1558142605878" duration="17732000" />
       <workItem from="1558236277709" duration="6649000" />
-      <workItem from="1558309091275" duration="1163000" />
+      <workItem from="1558309091275" duration="1811000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="134120000" />
+    <option name="totallyTimeSpent" value="134768000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -972,8 +972,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/js/components/Admin/Classroom/List.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="68" column="87" selection-start-line="68" selection-start-column="87" selection-end-line="68" selection-end-column="87" />
+        <state relative-caret-position="122">
+          <caret line="25" column="63" selection-start-line="25" selection-start-column="63" selection-end-line="25" selection-end-column="63" />
         </state>
       </provider>
     </entry>
