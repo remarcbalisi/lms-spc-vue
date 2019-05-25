@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import LandingNavBar from "./components/LandingNavBar";
 import AdminSideBar from "./components/Admin/SideBar";
+import LecturerSideBar from "./components/Lecturer/SideBar";
 import routes from './routes';
 import './bootstrap';
 import Auth from './auth.js';
@@ -30,6 +31,7 @@ router.beforeEach((to, from, next) => {
 
 Vue.component('landing-nav-bar', LandingNavBar);
 Vue.component('admin-side-bar', AdminSideBar);
+Vue.component('lecturer-side-bar', LecturerSideBar);
 
 window.BASE_URL = 'http://dev.lmsspcvue.test/';
 window.auth = new Auth();

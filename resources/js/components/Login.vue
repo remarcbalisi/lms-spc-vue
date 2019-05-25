@@ -57,7 +57,7 @@
                     .then(({data}) => {
                         this.logging_in = false;
                         auth.login(data.token, data.user);
-                        this.$router.push('/admin/home');
+                        this.$router.push(`/${data.user.role.slug}/home`);
                     })
                     .catch(({response}) => {
                         this.logging_in = false;

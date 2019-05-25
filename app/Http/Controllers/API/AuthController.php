@@ -87,6 +87,8 @@ class AuthController extends Controller
         // Get the data from the response
         $data = json_decode($response->getContent());
 
+        $user['role'] = $user->role()->first();
+
         // Format the final response in a desirable format
         return response()->json([
             'token' => $data->access_token,

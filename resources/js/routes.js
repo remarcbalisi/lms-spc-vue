@@ -1,5 +1,7 @@
 import Landing from "./components/Landing";
 import Login from "./components/Login";
+
+// Admin
 import AdminHome from "./components/Admin/Home";
 import AdminUserCreate from "./components/Admin/User/Create";
 import AdminRoleCreate from "./components/Admin/Role/Create";
@@ -17,6 +19,15 @@ import AdminClassroomCreate from "./components/Admin/Classroom/Create";
 import AdminClassroomList from "./components/Admin/Classroom/List";
 import AdminClassroomView from "./components/Admin/Classroom/View";
 
+// Lecturer
+import LecturerHome from "./components/Lecturer/Home";
+    //course
+import LecturerCourseCreate from "./components/Lecturer/Course/Create";
+import LecturerCourseList from "./components/Lecturer/Course/List";
+    //subject
+import LecturerSubjectCreate from "./components/Lecturer/Subject/Create";
+import LecturerSubjectList from "./components/Lecturer/Subject/List";
+
 export default {
     mode: 'history',
     routes: [
@@ -30,6 +41,8 @@ export default {
             name: 'login',
             component: Login
         },
+
+        // Admin
         {
             path: '/admin/home',
             name: 'admin_home',
@@ -124,6 +137,38 @@ export default {
             path: '/admin/classroom/view/:id',
             name: 'admin_classroom_view',
             component: AdminClassroomView,
+            meta: { middlewareAuth: true }
+        },
+
+        // Lecturer
+        {
+            path: '/lecturer/home',
+            name: 'lecturer_home',
+            component: LecturerHome,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/lecturer/course/create',
+            name: 'lecturer_course_create',
+            component: LecturerCourseCreate,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/lecturer/course/list',
+            name: 'lecturer_course_list',
+            component: LecturerCourseList,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/lecturer/subject/create',
+            name: 'lecturer_subject_create',
+            component: LecturerSubjectCreate,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/lecturer/subject/list',
+            name: 'lecturer_subject_list',
+            component: LecturerSubjectList,
             meta: { middlewareAuth: true }
         },
     ]
