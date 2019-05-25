@@ -27,6 +27,9 @@ import LecturerCourseList from "./components/Lecturer/Course/List";
     //subject
 import LecturerSubjectCreate from "./components/Lecturer/Subject/Create";
 import LecturerSubjectList from "./components/Lecturer/Subject/List";
+    //section
+import LecturerSectionCreate from "./components/Lecturer/Section/Create";
+import LecturerSectionList from "./components/Lecturer/Section/List";
 
 export default {
     mode: 'history',
@@ -169,6 +172,18 @@ export default {
             path: '/lecturer/subject/list',
             name: 'lecturer_subject_list',
             component: LecturerSubjectList,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/lecturer/section/create',
+            name: 'lecturer_section_create',
+            component: LecturerSectionCreate,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/lecturer/section/list',
+            name: 'lecturer_section_list',
+            component: LecturerSectionList,
             meta: { middlewareAuth: true }
         },
     ]

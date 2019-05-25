@@ -46,12 +46,12 @@
             <h5 class="uppercase mb-2">Sections</h5>
             <ul class="list-reset text-sm">
                 <li class="pb-4">
-                    <router-link class="text-black no-underline" to="/admin/section/create">
+                    <router-link class="text-black no-underline" to="/lecturer/section/create">
                         Create
                     </router-link>
                 </li>
                 <li class="pb-4">
-                    <router-link class="text-black no-underline" to="/admin/section/list">
+                    <router-link class="text-black no-underline" to="/lecturer/section/list">
                         List
                     </router-link>
                 </li>

@@ -102,5 +102,9 @@ Route::middleware('auth:api', 'role:lecturer')->group(function () {
         Route::post('/subject/store', 'API\Lecturer\SubjectController@store');
         Route::get('/subjects', 'API\Lecturer\SubjectController@get');
 
+        //Section
+        Route::post('/section/store', 'API\Lecturer\SectionController@store');
+        Route::get('/sections', 'API\Lecturer\SectionController@get');
+
     });
 });
