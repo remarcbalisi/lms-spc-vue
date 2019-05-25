@@ -89,6 +89,9 @@ Route::middleware('auth:api', 'role:admin')->group(function () {
 Route::middleware('auth:api', 'role:lecturer')->group(function () {
     Route::prefix('lecturer')->group(function () {
 
+        //User
+        Route::get('/users/by-role/{role_slug}', 'API\Lecturer\UserController@getAllUserByRole');
+
         //Course
         Route::post('/courses/store', 'API\Lecturer\CourseController@store');
         Route::post('/courses/update/{college_id}', 'API\Lecturer\CourseController@update');
@@ -105,6 +108,18 @@ Route::middleware('auth:api', 'role:lecturer')->group(function () {
         //Section
         Route::post('/section/store', 'API\Lecturer\SectionController@store');
         Route::get('/sections', 'API\Lecturer\SectionController@get');
+
+        //Academic Year Semester
+        Route::get('/academic-year-semester', 'API\Lecturer\AcademicYearSemesterController@get');
+
+        //Classroom
+        Route::post('/classroom/store', 'API\Lecturer\ClassroomController@store');
+        Route::get('/classrooms', 'API\Lecturer\ClassroomController@get');
+        Route::get('/classroom/{classroom_id}', 'API\Lecturer\ClassroomController@viewById');
+
+        //Classroom User
+        Route::post('/classroom-user/store', 'API\Lecturer\ClassroomUserController@store');
+        Route::get('/classroom-users', 'API\Lecturer\ClassroomUserController@get');
 
     });
 });
