@@ -25,5 +25,10 @@ class PostCategoriesTableSeeder extends Seeder
             'name' => 'General',
             'slug' => 'general',
         ]);
+
+        DB::table('post_categories')->insert([
+            'name' => 'Course Material',
+            'slug' => 'course-material',
+        ]);
     }
 }
