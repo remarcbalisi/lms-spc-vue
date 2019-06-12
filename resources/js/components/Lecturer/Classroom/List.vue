@@ -26,6 +26,7 @@
                         <td class="py-4 px-6 border-b border-grey-light">{{classroom.section.name}}</td>
                         <td class="py-4 px-6 border-b border-grey-light">{{classroom.academic_yr_semester.full_name}}</td>
                         <td class="py-4 px-6 border-b border-grey-light">
+                            <button v-on:click="visitClassroom(classroom)" class="bg-purple rounded p-1 text-sm pl-2 pr-2">Visit</button>
                             <button v-on:click="addFacultyModal(classroom)" class="bg-blue rounded p-1 text-sm pl-2 pr-2">Add Faculty</button>
                             <button v-on:click="addLearnerModal(classroom)" class="bg-green rounded p-1 text-sm pl-2 pr-2">Add Student</button>
                             <button v-on:click="editModal(classroom)" class="bg-orange rounded p-1 text-sm pl-2 pr-2">Edit</button>
@@ -157,6 +158,9 @@
         methods: {
             viewClassroom(classroom) {
                 this.$router.push(`/lecturer/classroom/view/${classroom.id}`);
+            },
+            visitClassroom(classroom) {
+                this.$router.push(`/lecturer/classroom/visit/${classroom.id}`);
             },
             getClassrooms() {
                 api.call('get', '/api/lecturer/classrooms').then(response=>{

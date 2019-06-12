@@ -34,6 +34,7 @@ import LecturerSectionList from "./components/Lecturer/Section/List";
 import LecturerClassroomCreate from "./components/Lecturer/Classroom/Create";
 import LecturerClassroomList from "./components/Lecturer/Classroom/List";
 import LecturerClassroomView from "./components/Lecturer/Classroom/View";
+import LecturerClassroomVisit from "./components/Lecturer/Classroom/Visit";
 
 export default {
     mode: 'history',
@@ -206,6 +207,12 @@ export default {
             path: '/lecturer/classroom/view/:id',
             name: 'lecturer_classroom_view',
             component: LecturerClassroomView,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/lecturer/classroom/visit/:id',
+            name: 'lecturer_classroom_visit',
+            component: LecturerClassroomVisit,
             meta: { middlewareAuth: true }
         },
     ]
