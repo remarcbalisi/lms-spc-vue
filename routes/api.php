@@ -121,5 +121,8 @@ Route::middleware('auth:api', 'role:lecturer')->group(function () {
         Route::post('/classroom-user/store', 'API\Lecturer\ClassroomUserController@store');
         Route::get('/classroom-users', 'API\Lecturer\ClassroomUserController@get');
 
+        //Post
+        Route::post('/post/store', 'API\Lecturer\PostController@store');
+
     });
 });
