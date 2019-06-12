@@ -36,9 +36,15 @@
                     </div>
                 </form>
 
-                <div class="flex mb-4 mt-4">
-                    <div class="w-3/5 bg-gray-400 h-12 border border-gray rounded p-3 mx-auto shadow-md">
-                        Hello World
+                <div v-for="p in posts" class="flex mb-4 mt-4">
+                    <div class="w-4/5 bg-gray-400 border border-gray rounded p-2 mx-auto shadow">
+                        <h5>
+                            {{p.posted_by.first_name}} {{p.posted_by.middle_name}} {{p.posted_by.last_name}}
+                        </h5>
+                        <h6 class="mb-2 text-red-dark">{{p.post_category.name}}</h6>
+                        <p>
+                            {{p.body}}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -67,6 +73,7 @@
                     post_category: 'general',
                 },
                 errors: [],
+                posts: [],
             };
         },
         mounted() {
@@ -79,6 +86,7 @@
                 this.$router.push('/login');
             });
             this.getClassroom();
+            this.getPosts();
         },
         methods: {
             logout() {
@@ -96,12 +104,27 @@
                     });
                 });
             },
+            getPosts() {
+                let loader = this.$loading.show({
+                    // Optional parameters
+                    container: this.fullPage ? null : this.$refs.formContainer,
+                    canCancel: true,
+                    onCancel: this.onCancel,
+                    loader: 'bars',
+                });
+                api.call('get', `/api/lecturer/post/classroom/list/${this.$route.params.id}`).then(response=>{
+                    console.log(response);
+                    this.posts = response.data.data;
+                    loader.hide();
+                });
+            },
             createPost() {
                 let loader = this.$loading.show({
                     // Optional parameters
                     container: this.fullPage ? null : this.$refs.formContainer,
                     canCancel: true,
                     onCancel: this.onCancel,
+                    loader: 'bars',
                 });
                 api.call('post', `/api/lecturer/post/store`, this.post).then(response=>{
                     loader.hide();
@@ -114,6 +137,7 @@
                             post_type: 'classroom',
                             post_category: 'general',
                         };
+                        this.getPosts();
                     }else {
                         alert("Error in Posting");
                     }

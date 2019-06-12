@@ -14883,6 +14883,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -14902,7 +14908,8 @@ __webpack_require__.r(__webpack_exports__);
         post_type: 'classroom',
         post_category: 'general'
       },
-      errors: []
+      errors: [],
+      posts: []
     };
   },
   mounted: function mounted() {
@@ -14918,6 +14925,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.$router.push('/login');
     });
     this.getClassroom();
+    this.getPosts();
   },
   methods: {
     logout: function logout() {
@@ -14938,27 +14946,46 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    createPost: function createPost() {
+    getPosts: function getPosts() {
       var _this3 = this;
 
       var loader = this.$loading.show({
         // Optional parameters
         container: this.fullPage ? null : this.$refs.formContainer,
         canCancel: true,
-        onCancel: this.onCancel
+        onCancel: this.onCancel,
+        loader: 'bars'
+      });
+      api.call('get', "/api/lecturer/post/classroom/list/".concat(this.$route.params.id)).then(function (response) {
+        console.log(response);
+        _this3.posts = response.data.data;
+        loader.hide();
+      });
+    },
+    createPost: function createPost() {
+      var _this4 = this;
+
+      var loader = this.$loading.show({
+        // Optional parameters
+        container: this.fullPage ? null : this.$refs.formContainer,
+        canCancel: true,
+        onCancel: this.onCancel,
+        loader: 'bars'
       });
       api.call('post', "/api/lecturer/post/store", this.post).then(function (response) {
         loader.hide();
 
         if (response.status == 200) {
           alert(response.data.message);
-          _this3.post = {
+          _this4.post = {
             title: null,
             body: null,
-            classroom_id: _this3.$route.params.id,
+            classroom_id: _this4.$route.params.id,
             post_type: 'classroom',
             post_category: 'general'
           };
+
+          _this4.getPosts();
         } else {
           alert("Error in Posting");
         }
@@ -58901,185 +58928,237 @@ var render = function() {
       [
         _c("lecturer-side-bar"),
         _vm._v(" "),
-        _c("div", { staticClass: "primary flex-1" }, [
-          _vm.errors.length
-            ? _c("p", [
-                _vm._v(
-                  "\n                Please correct the following error(s):"
-                ),
-                _c("b"),
-                _vm._v(" "),
-                _c(
-                  "ul",
-                  _vm._l(_vm.errors, function(error) {
-                    return _c("li", [_vm._v(_vm._s(error))])
-                  }),
-                  0
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("form", { staticClass: "w-full", on: { submit: _vm.checkForm } }, [
+        _c(
+          "div",
+          { staticClass: "primary flex-1" },
+          [
+            _vm.errors.length
+              ? _c("p", [
+                  _vm._v(
+                    "\n                Please correct the following error(s):"
+                  ),
+                  _c("b"),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    _vm._l(_vm.errors, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _c(
-              "div",
-              {
-                staticClass:
-                  "flex items-center border-b border-b-2 border-teal-500 py-2"
-              },
+              "form",
+              { staticClass: "w-full", on: { submit: _vm.checkForm } },
               [
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.post.body,
-                      expression: "post.body"
-                    }
-                  ],
-                  staticClass:
-                    "appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none",
-                  attrs: {
-                    type: "text",
-                    name: "body",
-                    placeholder: "What's in your mind?",
-                    "aria-label": "What's in your mind?"
-                  },
-                  domProps: { value: _vm.post.body },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.post, "body", $event.target.value)
-                    }
-                  }
-                }),
-                _vm._v(" "),
                 _c(
-                  "button",
+                  "div",
                   {
-                    class: [
-                      _vm.post.body == "" || _vm.post.body == null
-                        ? "cursor-not-allowed"
-                        : "",
-                      "flex-shrink-0 bg-blue hover:bg-blue-dark border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
-                    ],
-                    attrs: { type: "submit" }
+                    staticClass:
+                      "flex items-center border-b border-b-2 border-teal-500 py-2"
                   },
                   [
-                    _vm._v(
-                      "\n                        Post\n                    "
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.post.body,
+                          expression: "post.body"
+                        }
+                      ],
+                      staticClass:
+                        "appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none",
+                      attrs: {
+                        type: "text",
+                        name: "body",
+                        placeholder: "What's in your mind?",
+                        "aria-label": "What's in your mind?"
+                      },
+                      domProps: { value: _vm.post.body },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.post, "body", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        class: [
+                          _vm.post.body == "" || _vm.post.body == null
+                            ? "cursor-not-allowed"
+                            : "",
+                          "flex-shrink-0 bg-blue hover:bg-blue-dark border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+                        ],
+                        attrs: { type: "submit" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Post\n                    "
+                        )
+                      ]
                     )
                   ]
-                )
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex items-center p-2" }, [
+                  _c("div", { staticClass: "w-3/4" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.post.post_category,
+                          expression: "post.post_category"
+                        }
+                      ],
+                      staticClass: "mr-1",
+                      attrs: { id: "general", value: "general", type: "radio" },
+                      domProps: {
+                        checked: _vm._q(_vm.post.post_category, "general")
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.$set(_vm.post, "post_category", "general")
+                        }
+                      }
+                    }),
+                    _vm._v("General\n                        "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.post.post_category,
+                          expression: "post.post_category"
+                        }
+                      ],
+                      staticClass: "ml-3 mr-1",
+                      attrs: {
+                        id: "announcement",
+                        value: "room_announcement",
+                        type: "radio"
+                      },
+                      domProps: {
+                        checked: _vm._q(
+                          _vm.post.post_category,
+                          "room_announcement"
+                        )
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.$set(
+                            _vm.post,
+                            "post_category",
+                            "room_announcement"
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v("Announcement\n                        "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.post.post_category,
+                          expression: "post.post_category"
+                        }
+                      ],
+                      staticClass: "ml-3 mr-1",
+                      attrs: {
+                        id: "course_material",
+                        value: "course_material",
+                        type: "radio"
+                      },
+                      domProps: {
+                        checked: _vm._q(
+                          _vm.post.post_category,
+                          "course_material"
+                        )
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.$set(
+                            _vm.post,
+                            "post_category",
+                            "course_material"
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v("Course Material\n                    ")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-1/4" }, [
+                    _c(
+                      "label",
+                      { attrs: { for: "file_input" } },
+                      [
+                        _c("font-awesome-icon", {
+                          attrs: { icon: "paperclip" }
+                        }),
+                        _vm._v(" "),
+                        _c("small", [_vm._v("Attach File/Image/Video")])
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "hidden",
+                      attrs: { id: "file_input", type: "file" }
+                    })
+                  ])
+                ])
               ]
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "flex items-center p-2" }, [
-              _c("div", { staticClass: "w-3/4" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.post.post_category,
-                      expression: "post.post_category"
-                    }
-                  ],
-                  staticClass: "mr-1",
-                  attrs: { id: "general", value: "general", type: "radio" },
-                  domProps: {
-                    checked: _vm._q(_vm.post.post_category, "general")
-                  },
-                  on: {
-                    change: function($event) {
-                      return _vm.$set(_vm.post, "post_category", "general")
-                    }
-                  }
-                }),
-                _vm._v("General\n                        "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.post.post_category,
-                      expression: "post.post_category"
-                    }
-                  ],
-                  staticClass: "ml-3 mr-1",
-                  attrs: {
-                    id: "announcement",
-                    value: "room_announcement",
-                    type: "radio"
-                  },
-                  domProps: {
-                    checked: _vm._q(_vm.post.post_category, "room_announcement")
-                  },
-                  on: {
-                    change: function($event) {
-                      return _vm.$set(
-                        _vm.post,
-                        "post_category",
-                        "room_announcement"
-                      )
-                    }
-                  }
-                }),
-                _vm._v("Announcement\n                        "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.post.post_category,
-                      expression: "post.post_category"
-                    }
-                  ],
-                  staticClass: "ml-3 mr-1",
-                  attrs: {
-                    id: "course_material",
-                    value: "course_material",
-                    type: "radio"
-                  },
-                  domProps: {
-                    checked: _vm._q(_vm.post.post_category, "course_material")
-                  },
-                  on: {
-                    change: function($event) {
-                      return _vm.$set(
-                        _vm.post,
-                        "post_category",
-                        "course_material"
-                      )
-                    }
-                  }
-                }),
-                _vm._v("Course Material\n                    ")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "w-1/4" }, [
+            _vm._l(_vm.posts, function(p) {
+              return _c("div", { staticClass: "flex mb-4 mt-4" }, [
                 _c(
-                  "label",
-                  { attrs: { for: "file_input" } },
+                  "div",
+                  {
+                    staticClass:
+                      "w-4/5 bg-gray-400 border border-gray rounded p-2 mx-auto shadow"
+                  },
                   [
-                    _c("font-awesome-icon", { attrs: { icon: "paperclip" } }),
+                    _c("h5", [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(p.posted_by.first_name) +
+                          " " +
+                          _vm._s(p.posted_by.middle_name) +
+                          " " +
+                          _vm._s(p.posted_by.last_name) +
+                          "\n                    "
+                      )
+                    ]),
                     _vm._v(" "),
-                    _c("small", [_vm._v("Attach File/Image/Video")])
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "hidden",
-                  attrs: { id: "file_input", type: "file" }
-                })
+                    _c("h6", { staticClass: "mb-2 text-red-dark" }, [
+                      _vm._v(_vm._s(p.post_category.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(p.body) +
+                          "\n                    "
+                      )
+                    ])
+                  ]
+                )
               ])
-            ])
-          ]),
-          _vm._v(" "),
-          _vm._m(1)
-        ])
+            })
+          ],
+          2
+        )
       ],
       1
     )
@@ -59094,21 +59173,6 @@ var staticRenderFns = [
       _c("img", {
         attrs: { width: "50", height: "50", src: "/img/spc_logo.png" }
       })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex mb-4 mt-4" }, [
-      _c(
-        "div",
-        {
-          staticClass:
-            "w-3/5 bg-gray-400 h-12 border border-gray rounded p-3 mx-auto shadow-md"
-        },
-        [_vm._v("\n                    Hello World\n                ")]
-      )
     ])
   }
 ]

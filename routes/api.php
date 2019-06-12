@@ -123,6 +123,7 @@ Route::middleware('auth:api', 'role:lecturer')->group(function () {
 
         //Post
         Route::post('/post/store', 'API\Lecturer\PostController@store');
+        Route::get('/post/classroom/list/{classroom_id}', 'API\Lecturer\PostController@getClassroomPost');
 
     });
 });

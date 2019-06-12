@@ -27,4 +27,18 @@ class PostController extends Controller
             'message' => 'Successfully posted ' . $new_post->title,
         ]);
     }
+
+    public function getClassroomPost($classroom_id) {
+        $posts = Post::where('classroom_id', $classroom_id)->latest()->get();
+        foreach( $posts as $post ) {
+            $post['posted_by'] = $post->postedBy()->first();
+            $post['post_type'] = $post->postType()->first();
+            $post['post_category'] = $post->postCategory()->first();
+        }
+        return response()->json([
+           'data' => $posts,
+           'status' => 200,
+           'message' => 'Successfully get all posts',
+        ]);
+    }
 }
