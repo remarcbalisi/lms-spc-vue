@@ -107,6 +107,13 @@
                     loader.hide();
                     if( response.status == 200 ) {
                         alert(response.data.message);
+                        this.post =  {
+                            title : null,
+                            body: null,
+                            classroom_id: this.$route.params.id,
+                            post_type: 'classroom',
+                            post_category: 'general',
+                        };
                     }else {
                         alert("Error in Posting");
                     }

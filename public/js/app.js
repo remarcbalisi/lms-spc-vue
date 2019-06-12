@@ -14939,6 +14939,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     createPost: function createPost() {
+      var _this3 = this;
+
       var loader = this.$loading.show({
         // Optional parameters
         container: this.fullPage ? null : this.$refs.formContainer,
@@ -14950,6 +14952,13 @@ __webpack_require__.r(__webpack_exports__);
 
         if (response.status == 200) {
           alert(response.data.message);
+          _this3.post = {
+            title: null,
+            body: null,
+            classroom_id: _this3.$route.params.id,
+            post_type: 'classroom',
+            post_category: 'general'
+          };
         } else {
           alert("Error in Posting");
         }
