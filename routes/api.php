@@ -134,5 +134,8 @@ Route::middleware('auth:api', 'role:learner')->group(function () {
         //Classroom
         Route::get('/my-classrooms', 'API\learner\ClassroomUserController@myClassrooms');
 
+        //Post
+        Route::get('/post/classroom/list/{classroom_id}', 'API\Learner\PostController@getClassroomPost');
+
     });
 });

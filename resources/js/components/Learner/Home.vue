@@ -18,7 +18,7 @@
                     <tbody>
                     <tr v-for="classroom_user in classroom_users" class="hover:bg-blue-lightest">
                         <td class="py-4 px-6 border-b border-grey-light">
-                            <a href="javascript:;" v-on:click="viewClassroom(classroom)">
+                            <a href="javascript:;" v-on:click="visitClassroom(classroom_user.classroom)">
                                 {{classroom_user.classroom.subject.name}}
                             </a>
                         </td>
@@ -57,11 +57,21 @@
                 auth.logout();
             },
             myClassrooms() {
-                api.call('get', '/api/learner/my-classrooms').then(response=>{
-                    console.log(response);
-                    this.classroom_users = response.data.data;
+                let loader = this.$loading.show({
+                    // Optional parameters
+                    container: this.fullPage ? null : this.$refs.formContainer,
+                    canCancel: true,
+                    onCancel: this.onCancel,
+                    loader: 'bars',
                 });
-            }
+                api.call('get', '/api/learner/my-classrooms').then(response=>{
+                    this.classroom_users = response.data.data;
+                    loader.hide();
+                });
+            },
+            visitClassroom(classroom) {
+                this.$router.push(`/learner/classroom/visit/${classroom.id}`);
+            },
         }
     }
 </script>

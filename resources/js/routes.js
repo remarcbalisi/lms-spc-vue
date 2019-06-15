@@ -39,6 +39,7 @@ import LecturerClassroomVisit from "./components/Lecturer/Classroom/Visit";
 // Learner
 
 import LearnerHome from "./components/Learner/Home";
+import LearnerClassroomVisit from "./components/Learner/Classroom/Visit";
 
 export default {
     mode: 'history',
@@ -225,6 +226,12 @@ export default {
             path: '/learner/home',
             name: 'learner_home',
             component: LearnerHome,
+            meta: { middlewareAuth: true }
+        },
+        {
+            path: '/learner/classroom/visit/:id',
+            name: 'learner_classroom_visit',
+            component: LearnerClassroomVisit,
             meta: { middlewareAuth: true }
         },
     ]
