@@ -127,3 +127,12 @@ Route::middleware('auth:api', 'role:lecturer')->group(function () {
 
     });
 });
+
+Route::middleware('auth:api', 'role:learner')->group(function () {
+    Route::prefix('learner')->group(function () {
+
+        //Classroom
+        Route::get('/my-classrooms', 'API\learner\ClassroomUserController@myClassrooms');
+
+    });
+});

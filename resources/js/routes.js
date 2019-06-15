@@ -36,6 +36,10 @@ import LecturerClassroomList from "./components/Lecturer/Classroom/List";
 import LecturerClassroomView from "./components/Lecturer/Classroom/View";
 import LecturerClassroomVisit from "./components/Lecturer/Classroom/Visit";
 
+// Learner
+
+import LearnerHome from "./components/Learner/Home";
+
 export default {
     mode: 'history',
     routes: [
@@ -213,6 +217,14 @@ export default {
             path: '/lecturer/classroom/visit/:id',
             name: 'lecturer_classroom_visit',
             component: LecturerClassroomVisit,
+            meta: { middlewareAuth: true }
+        },
+
+        // Learner
+        {
+            path: '/learner/home',
+            name: 'learner_home',
+            component: LearnerHome,
             meta: { middlewareAuth: true }
         },
     ]
