@@ -136,6 +136,7 @@ Route::middleware('auth:api', 'role:learner')->group(function () {
 
         //Post
         Route::get('/post/classroom/list/{classroom_id}', 'API\Learner\PostController@getClassroomPost');
+        Route::post('/post/store', 'API\Learner\PostController@store');
 
     });
 });
