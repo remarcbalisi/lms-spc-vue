@@ -26,7 +26,8 @@
                                 <font-awesome-icon icon="paperclip" />
                                 <small>Attach File/Image/Video</small>
                             </label>
-                            <input id="file_input" type="file" class="hidden" >
+                            <input type="file" id="file_input" ref="myFiles" class="hidden"
+                                   @change="previewFiles" multiple>
                         </div>
                     </div>
                 </form>
@@ -40,6 +41,12 @@
                         <p>
                             {{p.body}}
                         </p>
+                        <div v-if="p.multimedias" v-for="multimedia in p.multimedias">
+                            <img v-if="checkIfImage(multimedia.type)" v-bind:src="'/storage/' + multimedia.directory">
+                            <a v-if="!checkIfImage(multimedia.type)" href="javascript:;" v-on:click="downloadFile(multimedia.directory)">
+                                {{multimedia.original_name}}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,7 +66,11 @@
                     classroom_id: this.$route.params.id,
                     post_type: 'classroom',
                     post_category: 'general',
+                    uploaded_files: [],
+                    multimedias: [],
                 },
+                files: [],
+                uploaded_files: [],
                 errors: [],
                 posts: [],
             };
@@ -93,6 +104,38 @@
                     loader.hide();
                 });
             },
+            previewFiles() {
+                this.files = this.$refs.myFiles.files;
+                this.submitFiles();
+            },
+            submitFiles() {
+                let loader = this.$loading.show({
+                    // Optional parameters
+                    container: this.fullPage ? null : this.$refs.formContainer,
+                    canCancel: true,
+                    onCancel: this.onCancel,
+                    loader: 'bars',
+                });
+                for( let i = 0; i < this.files.length; i++ ){
+                    if(this.files[i].id) {
+                        continue;
+                    }
+                    let formData = new FormData();
+                    formData.append('file', this.files[i]);
+
+                    axios.post('/api/learner/multimedia/store',
+                        formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }
+                    ).then(response => {
+                        this.post.uploaded_files.push(response.data.data);
+                    });
+                }
+                loader.hide();
+            },
             createPost() {
                 let loader = this.$loading.show({
                     // Optional parameters
@@ -103,6 +146,7 @@
                 });
                 api.call('post', `/api/learner/post/store`, this.post).then(response=>{
                     loader.hide();
+                    console.log(response);
                     if( response.status == 200 ) {
                         alert(response.data.message);
                         this.post =  {
@@ -137,6 +181,18 @@
                 var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(email);
             },
+            checkIfImage(type) {
+                let types = {
+                    "image/jpeg": true,
+                    "image/png": false
+                };
+
+                return types[type];
+            },
+            downloadFile(file_path) {
+                let route = this.$router.resolve({path: `/api/learner/multimedia/download`});
+                window.open(route.href, '_blank');
+            }
         }
     }
 </script>

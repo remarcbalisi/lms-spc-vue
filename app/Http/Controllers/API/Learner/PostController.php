@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Learner;
 
+use App\Multimedia;
 use App\Post;
 use App\PostCategory;
 use App\PostType;
@@ -21,6 +22,14 @@ class PostController extends Controller
         $new_post->classroom_id = $request->classroom_id ? $request->classroom_id : null;
         $new_post->post_category_id = $post_category->id;
         $new_post->save();
+
+        if( !empty($request->uploaded_files) ) {
+            foreach( $request->uploaded_files as $uploaded_file ) {
+                $multimedia = Multimedia::where('id', $uploaded_file['id'])->first();
+                $multimedia->post_id = $new_post->id;
+                $multimedia->save();
+            }
+        }
         return response()->json([
             'data' => $new_post,
             'status' => 200,
@@ -34,6 +43,7 @@ class PostController extends Controller
             $post['posted_by'] = $post->postedBy()->first();
             $post['post_type'] = $post->postType()->first();
             $post['post_category'] = $post->postCategory()->first();
+            $post['multimedias'] = $post->multimedias()->get();
         }
         return response()->json([
             'data' => $posts,

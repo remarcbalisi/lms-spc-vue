@@ -22,4 +22,8 @@ class Post extends Model
     public function postCategory() {
         return $this->belongsTo('App\PostCategory', 'post_category_id');
     }
+
+    public function multimedias() {
+        return $this->hasMany('App\Multimedia', 'post_id', 'id');
+    }
 }

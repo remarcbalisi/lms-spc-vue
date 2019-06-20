@@ -14341,6 +14341,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -14351,8 +14358,12 @@ __webpack_require__.r(__webpack_exports__);
         body: null,
         classroom_id: this.$route.params.id,
         post_type: 'classroom',
-        post_category: 'general'
+        post_category: 'general',
+        uploaded_files: [],
+        multimedias: []
       },
+      files: [],
+      uploaded_files: [],
       errors: [],
       posts: []
     };
@@ -14391,8 +14402,41 @@ __webpack_require__.r(__webpack_exports__);
         loader.hide();
       });
     },
-    createPost: function createPost() {
+    previewFiles: function previewFiles() {
+      this.files = this.$refs.myFiles.files;
+      this.submitFiles();
+    },
+    submitFiles: function submitFiles() {
       var _this3 = this;
+
+      var loader = this.$loading.show({
+        // Optional parameters
+        container: this.fullPage ? null : this.$refs.formContainer,
+        canCancel: true,
+        onCancel: this.onCancel,
+        loader: 'bars'
+      });
+
+      for (var i = 0; i < this.files.length; i++) {
+        if (this.files[i].id) {
+          continue;
+        }
+
+        var formData = new FormData();
+        formData.append('file', this.files[i]);
+        axios.post('/api/learner/multimedia/store', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (response) {
+          _this3.post.uploaded_files.push(response.data.data);
+        });
+      }
+
+      loader.hide();
+    },
+    createPost: function createPost() {
+      var _this4 = this;
 
       var loader = this.$loading.show({
         // Optional parameters
@@ -14403,18 +14447,19 @@ __webpack_require__.r(__webpack_exports__);
       });
       api.call('post', "/api/learner/post/store", this.post).then(function (response) {
         loader.hide();
+        console.log(response);
 
         if (response.status == 200) {
           alert(response.data.message);
-          _this3.post = {
+          _this4.post = {
             title: null,
             body: null,
-            classroom_id: _this3.$route.params.id,
+            classroom_id: _this4.$route.params.id,
             post_type: 'classroom',
             post_category: 'general'
           };
 
-          _this3.getPosts();
+          _this4.getPosts();
         } else {
           alert("Error in Posting");
         }
@@ -14438,6 +14483,19 @@ __webpack_require__.r(__webpack_exports__);
     validEmail: function validEmail(email) {
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
+    },
+    checkIfImage: function checkIfImage(type) {
+      var types = {
+        "image/jpeg": true,
+        "image/png": false
+      };
+      return types[type];
+    },
+    downloadFile: function downloadFile(file_path) {
+      var route = this.$router.resolve({
+        path: "/api/learner/multimedia/download"
+      });
+      window.open(route.href, '_blank');
     }
   }
 });
@@ -58192,8 +58250,10 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c("input", {
+                      ref: "myFiles",
                       staticClass: "hidden",
-                      attrs: { id: "file_input", type: "file" }
+                      attrs: { type: "file", id: "file_input", multiple: "" },
+                      on: { change: _vm.previewFiles }
                     })
                   ])
                 ])
@@ -58231,8 +58291,46 @@ var render = function() {
                           _vm._s(p.body) +
                           "\n                    "
                       )
-                    ])
-                  ]
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(p.multimedias, function(multimedia) {
+                      return p.multimedias
+                        ? _c("div", [
+                            _vm.checkIfImage(multimedia.type)
+                              ? _c("img", {
+                                  attrs: {
+                                    src: "/storage/" + multimedia.directory
+                                  }
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            !_vm.checkIfImage(multimedia.type)
+                              ? _c(
+                                  "a",
+                                  {
+                                    attrs: { href: "javascript:;" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.downloadFile(
+                                          multimedia.directory
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(multimedia.original_name) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ])
+                        : _vm._e()
+                    })
+                  ],
+                  2
                 )
               ])
             })
