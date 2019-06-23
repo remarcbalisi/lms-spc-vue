@@ -190,8 +190,9 @@
                 return types[type];
             },
             downloadFile(file_path) {
-                let route = this.$router.resolve({path: `/api/learner/multimedia/download`});
-                window.open(route.href, '_blank');
+                api.call('post', `/api/learner/multimedia/download`, {file_path:file_path }).then(response=>{
+
+                });
             }
         }
     }

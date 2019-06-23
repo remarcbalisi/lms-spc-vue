@@ -24,7 +24,7 @@ class MultimediaController extends Controller
         ]);
     }
 
-    public function download() {
-        return Storage::disk('public')->download('multimedia/rm43DNjLaWP8eNdx9ZHB6K5ZNwlz2nz9DXCCkCA5.pdf');
+    public function download(Request $request) {
+        return Storage::disk('public')->download($request->file_path);
     }
 }

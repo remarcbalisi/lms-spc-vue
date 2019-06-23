@@ -140,7 +140,7 @@ Route::middleware('auth:api', 'role:learner')->group(function () {
 
         //Multimedia
         Route::post('/multimedia/store', 'API\Learner\MultimediaController@store');
-        Route::get('/multimedia/download', 'API\Learner\MultimediaController@download');
+        Route::post('/multimedia/download', 'API\Learner\MultimediaController@download');
 
     });
 });

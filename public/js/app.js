@@ -14492,10 +14492,9 @@ __webpack_require__.r(__webpack_exports__);
       return types[type];
     },
     downloadFile: function downloadFile(file_path) {
-      var route = this.$router.resolve({
-        path: "/api/learner/multimedia/download"
-      });
-      window.open(route.href, '_blank');
+      api.call('post', "/api/learner/multimedia/download", {
+        file_path: file_path
+      }).then(function (response) {});
     }
   }
 });
